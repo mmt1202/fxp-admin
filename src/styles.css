@@ -30,6 +30,12 @@ button {
   cursor: pointer;
 }
 
+.secondary-button {
+  padding: 8px 12px;
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.65;
@@ -181,4 +187,233 @@ button:disabled {
   color: #1d4ed8;
   background: #eff6ff;
   font-weight: 700;
+}
+
+select {
+  font: inherit;
+}
+
+.page-heading h1,
+.marketing-form h2,
+.table-card h2,
+.risk-card h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.page-heading {
+  margin-bottom: 20px;
+}
+
+.page-heading p {
+  color: #64748b;
+}
+
+.notice-banner {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #fde68a;
+  border-radius: 14px;
+  color: #92400e;
+  background: #fffbeb;
+}
+
+.stats-grid,
+.marketing-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-bottom: 20px;
+}
+
+.stats-grid div {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eff6ff, #fff);
+}
+
+.stats-grid strong {
+  color: #1d4ed8;
+  font-size: 28px;
+}
+
+.stats-grid span {
+  color: #64748b;
+}
+
+.marketing-grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-bottom: 22px;
+}
+
+.marketing-form,
+.table-card,
+.risk-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.marketing-form {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.marketing-form label {
+  display: grid;
+  gap: 8px;
+  color: #475569;
+  font-weight: 700;
+}
+
+.marketing-form input,
+.marketing-form select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.table-card,
+.risk-card {
+  margin-top: 18px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  margin-top: 16px;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+th {
+  color: #475569;
+  background: #f8fafc;
+  font-size: 13px;
+}
+
+td {
+  color: #334155;
+}
+
+code {
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.status-pill {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #475569;
+  background: #f1f5f9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status-pill.active,
+.status-pill.redeemed,
+.status-pill.used {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-pill.draft,
+.status-pill.unused,
+.status-pill.claimed {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.status-pill.paused,
+.status-pill.disabled,
+.status-pill.expired {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.table-toolbar p {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.table-toolbar input {
+  width: min(280px, 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.checklist-grid div {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: #eff6ff;
+}
+
+.checklist-grid strong {
+  color: #1d4ed8;
+}
+
+.checklist-grid span,
+.risk-card ul {
+  color: #475569;
+  line-height: 1.8;
+}
+
+.risk-card ul {
+  margin-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .form-row,
+  .table-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .table-toolbar {
+    display: grid;
+  }
 }
