@@ -182,3 +182,25 @@ button:disabled {
   background: #eff6ff;
   font-weight: 700;
 }
+
+.api-panel {
+  width: 100%;
+  max-height: 560px;
+  overflow: auto;
+  margin-top: 28px;
+  padding: 18px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  color: #0f172a;
+  background: #f8fafc;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.api-panel.error {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fef2f2;
+}
