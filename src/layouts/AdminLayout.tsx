@@ -24,7 +24,7 @@ export function AdminLayout() {
             <strong>房小评管理后台</strong>
             <span>连接 App 既有后端接口，统一管理业务运营数据</span>
           </div>
-          <button type="button" onClick={handleLogout}>退出登录</button>
+          <button type="button" className="logout-button" onClick={handleLogout}>退出登录</button>
         </header>
         <section className="content-card">
           <Outlet />
