@@ -182,3 +182,146 @@ button:disabled {
   background: #eff6ff;
   font-weight: 700;
 }
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 180px 180px auto;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.filter-bar input,
+.filter-bar select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #1f2937;
+  background: #fff;
+  font: inherit;
+}
+
+.table-card {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+th,
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  color: #475569;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.action-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.action-group button,
+.pagination-bar button,
+.detail-panel button {
+  padding: 8px 12px;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  color: #fff;
+  background: #dc2626;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status-pill.success {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-pill.muted {
+  color: #64748b;
+  background: #e2e8f0;
+}
+
+.empty-cell,
+.loading-row {
+  padding: 28px;
+  color: #64748b;
+  text-align: center;
+}
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  color: #64748b;
+}
+
+.pagination-bar div {
+  display: flex;
+  gap: 8px;
+}
+
+.detail-panel {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: #eff6ff;
+}
+
+.detail-panel h2 {
+  margin: 0;
+}
+
+.detail-panel pre {
+  grid-column: 1 / -1;
+  overflow: auto;
+  max-height: 420px;
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  color: #dbeafe;
+  background: #0f172a;
+}
+
+@media (max-width: 900px) {
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+}
