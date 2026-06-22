@@ -4,5 +4,6 @@ export const adminModules = [
   { path: '/properties', label: '房源管理', icon: '🏠', description: '维护房源基础信息、上下架状态、区域与配套标签。' },
   { path: '/reviews', label: '评价管理', icon: '⭐', description: '查看房源评价、评分维度、内容质量与互动数据。' },
   { path: '/moderation', label: '举报/审核管理', icon: '🛡️', description: '处理举报线索、内容审核、申诉与处置记录。' },
+  { path: '/system-health', label: '系统监控', icon: '🟢', description: '查看 API、数据库、Redis、队列、AI、支付回调与推送服务健康状态。' },
   { path: '/settings', label: '系统配置', icon: '⚙️', description: '配置后台权限、业务字典、审核策略与接口参数。' },
 ];
