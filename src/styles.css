@@ -182,3 +182,274 @@ button:disabled {
   background: #eff6ff;
   font-weight: 700;
 }
+
+.risk-page h1,
+.risk-page h2,
+.risk-page h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.risk-header,
+.section-title,
+.hit-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.risk-header p {
+  margin: 10px 0 0;
+  color: #64748b;
+}
+
+.risk-stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 4px 12px;
+  min-width: 320px;
+  padding: 18px;
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  background: #eff6ff;
+}
+
+.risk-stats strong {
+  color: #1d4ed8;
+  font-size: 28px;
+}
+
+.risk-stats span {
+  color: #475569;
+  font-size: 13px;
+}
+
+.notice {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.risk-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-title input,
+.risk-form input,
+.risk-form select {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.risk-form {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(140px, 1fr) 130px 92px auto auto;
+  gap: 12px;
+  align-items: center;
+  margin: 18px 0;
+}
+
+.check-label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #475569;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+th {
+  color: #475569;
+  background: #f8fafc;
+  font-size: 13px;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge.high {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.badge.medium {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.badge.low {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions button,
+.ghost {
+  padding: 8px 12px;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.actions .danger {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.rule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.rule-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.rule-card span,
+.hit-item span,
+.hit-item small {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.rule-card h3 {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.rule-card p,
+.hit-item p {
+  color: #475569;
+  line-height: 1.6;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch span {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  cursor: pointer;
+}
+
+.switch span::after {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fff;
+  content: '';
+  transition: 0.2s;
+}
+
+.switch input:checked + span {
+  background: #2563eb;
+}
+
+.switch input:checked + span::after {
+  transform: translateX(20px);
+}
+
+.hit-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.hit-item {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.hit-item > div:last-child {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  min-width: 170px;
+}
+
+@media (max-width: 920px) {
+  .risk-form,
+  .risk-header,
+  .section-title,
+  .hit-item {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .risk-form {
+    display: grid;
+  }
+
+  .hit-item > div:last-child {
+    justify-items: start;
+  }
+}
+
+.empty-cell,
+.empty-state {
+  padding: 24px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.empty-state {
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  background: #f8fafc;
+}
