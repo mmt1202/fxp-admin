@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
+import { ContentModeration } from '../pages/ContentModeration';
 import { AnalyticsPage, DashboardPage } from '../pages/AnalyticsPages';
 import { ModulePage } from '../pages/ModulePage';
 import { SystemConfig } from '../pages/SystemConfig';
@@ -28,6 +29,19 @@ export const router = createBrowserRouter([
         })),
     ],
   },
+  {
+      path: '/',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <Navigate to="/dashboard" replace /> },
+        ...adminModules.map((module) => ({
+          path: module.path.slice(1),
+          element: module.path === '/content-moderation'
+            ? <ContentModeration />
+            : <ModulePage title={module.label} description={module.description} />,
+        })),
+      ],
+    }
   {
       path: '/',
       element: <AdminLayout />,

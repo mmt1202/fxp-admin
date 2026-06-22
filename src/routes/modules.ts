@@ -87,4 +87,5 @@ export const adminModules: AdminModule[] = [
   { path: '/membership', label: '会员配置', icon: '💎', description: '配置会员权益、套餐状态、增值服务与更新策略。', permission: 'membership:update' },
   { path: '/dashboard', label: '数据看板', icon: '📊', description: '核心指标、增长趋势、评价质量与审核效率概览。', permission: 'dashboard:view' },
   { path: '/admin-users', label: '管理员管理', icon: '🔐', description: '管理后台账号、角色、权限点与账号启停状态。', permission: 'admin-users:manage' },
+  { path: '/content-moderation', label: '内容审核', icon: '📝', description: '审核社区笔记与评论，处理隐藏、恢复和驳回。' },
 ];
