@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
-import { ModulePage } from '../pages/ModulePage';
 import { adminModules } from './modules';
+import { PermissionRoute } from './PermissionRoute';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/dashboard" replace /> },
       ...adminModules.map((module) => ({
         path: module.path.slice(1),
-        element: <ModulePage title={module.label} description={module.description} />,
+        element: <PermissionRoute module={module} />,
       })),
     ],
   },

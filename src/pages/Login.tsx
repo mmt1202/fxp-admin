@@ -22,7 +22,7 @@ export function Login() {
 
     try {
       const result = await loginApi(username, password);
-      login(result.token);
+      login(result.token, result.admin);
       navigate('/dashboard', { replace: true });
     } catch {
       setError('登录失败，请检查账号、密码或后端接口配置。');
