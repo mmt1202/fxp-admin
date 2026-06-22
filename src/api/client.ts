@@ -1,4 +1,4 @@
-import { tokenStorage } from '../utils/token';
+import { authState } from '../state/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
@@ -20,7 +20,7 @@ export class ApiError extends Error {
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { skipAuth = false, headers, body, ...init } = options;
-  const token = tokenStorage.get();
+  const token = authState.getToken();
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     body,
