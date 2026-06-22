@@ -182,3 +182,171 @@ button:disabled {
   background: #eff6ff;
   font-weight: 700;
 }
+
+.user-detail-page h1,
+.user-detail-page h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.user-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.user-detail-header p,
+.section-title span,
+.note-item footer,
+.info-text {
+  color: #64748b;
+}
+
+.user-id-field {
+  display: grid;
+  gap: 8px;
+  min-width: 240px;
+  color: #475569;
+  font-weight: 700;
+}
+
+.user-id-field input,
+.inline-form input,
+.note-form textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.success-text {
+  margin-bottom: 12px;
+  color: #059669;
+}
+
+.user-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 20px;
+}
+
+.management-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.section-title {
+  display: grid;
+  gap: 6px;
+}
+
+.section-title span {
+  font-size: 13px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 42px;
+}
+
+.tag-pill {
+  --tag-color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--tag-color), white 60%);
+  border-radius: 999px;
+  color: var(--tag-color);
+  background: color-mix(in srgb, var(--tag-color), white 90%);
+  font-weight: 700;
+}
+
+.tag-pill button {
+  display: inline-grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  padding: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--tag-color);
+}
+
+.inline-form {
+  display: flex;
+  gap: 10px;
+}
+
+.inline-form input {
+  flex: 1;
+}
+
+.note-form {
+  display: grid;
+  gap: 12px;
+}
+
+.note-form textarea {
+  resize: vertical;
+}
+
+.note-form button {
+  justify-self: end;
+}
+
+.note-list {
+  display: grid;
+  gap: 12px;
+}
+
+.note-item {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.note-item p {
+  margin: 0 0 12px;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.note-item footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.empty-state {
+  color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+  .user-detail-header,
+  .inline-form {
+    flex-direction: column;
+  }
+
+  .user-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-id-field {
+    width: 100%;
+  }
+}
