@@ -182,3 +182,112 @@ button:disabled {
   background: #eff6ff;
   font-weight: 700;
 }
+
+.page-heading h1,
+.system-config-page h1 {
+  margin: 0 0 10px;
+  color: #0f172a;
+}
+
+.page-heading p:last-child {
+  margin: 0 0 24px;
+  color: #64748b;
+}
+
+.config-form {
+  display: grid;
+  gap: 22px;
+}
+
+.form-section {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.form-section h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.field-label {
+  display: grid;
+  gap: 8px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.field-label input,
+.field-label textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+  resize: vertical;
+}
+
+.switch-grid,
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.switch-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.switch-card input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: #2563eb;
+}
+
+.switch-card span {
+  display: grid;
+  gap: 6px;
+}
+
+.switch-card small {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.inline-switch {
+  width: fit-content;
+}
+
+.status-message {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.status-message.saved {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-message.error {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
