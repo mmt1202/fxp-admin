@@ -167,18 +167,59 @@ button:disabled {
   box-shadow: 0 10px 30px rgb(15 23 42 / 8%);
 }
 
-.placeholder-grid {
+.endpoint-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
+  gap: 14px;
   margin-top: 28px;
 }
 
-.placeholder-grid div {
-  padding: 22px;
-  border: 1px dashed #bfdbfe;
+.endpoint-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid #dbeafe;
   border-radius: 16px;
-  color: #1d4ed8;
-  background: #eff6ff;
+  background: #f8fbff;
+}
+
+.endpoint-card code {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.endpoint-card p {
+  grid-column: 2;
+  margin: 0;
+}
+
+.method-badge {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 48px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.method-get {
+  background: #16a34a;
+}
+
+.method-put {
+  background: #2563eb;
+}
+
+.empty-state {
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  color: #64748b;
+  background: #f8fafc;
   font-weight: 700;
 }
