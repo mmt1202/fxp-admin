@@ -24,12 +24,33 @@ export type AdminProperty = Record<string, unknown> & {
   title?: string;
   completenessScore?: number;
   completeness?: PropertyCompleteness;
+  address?: string;
+  city?: string;
+  district?: string;
+  userId?: string | number;
+  ownerId?: string | number;
+  isPublic?: boolean;
+  visibility?: PropertyVisibility;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
 };
 
 export type PropertyCompletenessListParams = {
   belowScore?: number;
   page?: number;
   pageSize?: number;
+  keyword?: string;
+  userId?: string;
+  isPublic?: string;
+};
+
+export type AdminPropertyListResponse = {
+  items: AdminProperty[];
+  total: number;
+  page: number;
+  pageSize: number;
 };
 
 function normalizeScore(score: unknown) {
