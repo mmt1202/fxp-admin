@@ -93,4 +93,15 @@ export const router = createBrowserRouter([
         })),
       ],
     },
+{
+    path: '/',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      ...adminModules.map((module) => ({
+        path: module.path.slice(1),
+        element: module.element ?? <ModulePage title={module.label} description={module.description} />,
+      })),
+    ],
+  },
 ]);
