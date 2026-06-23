@@ -129,8 +129,9 @@ export const router = createBrowserRouter([
         path: module.path.slice(1),
         element: module.path === '/config'
           ? <SystemConfig />
-          : <ModulePage title={module.label} description={module.description} />,
-        element: <ModulePage title={module.label} description={module.description} module={module.module} />,
+          : module.path === '/user-segments'
+            ? <UserSegments />
+            : <ModulePage title={module.label} description={module.description} module={module.module ?? 'dashboard'} />,
       })),
     ],
   },
