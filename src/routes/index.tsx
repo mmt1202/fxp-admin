@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
         path: module.path.slice(1),
         element: module.path === '/config'
           ? <SystemConfig />
-          : <ModulePage title={module.label} description={module.description} />,
+          : <ModulePage title={module.label} description={module.description} module={module.module} />,
       })),
     ],
   },
