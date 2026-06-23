@@ -287,9 +287,12 @@ button:disabled {
   background: #fee2e2;
 }
 
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +313,135 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+select,
+textarea {
+  font: inherit;
+}
+
+.field-label select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.recommendation-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.stack-form,
+.item-form {
+  display: grid;
+  gap: 14px;
+}
+
+.pool-list {
+  display: grid;
+  gap: 12px;
+}
+
+.pool-card {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  background: #fff;
+  text-align: left;
+}
+
+.pool-card span,
+.muted-text,
+.table-row small {
+  color: #64748b;
+}
+
+.pool-card.active {
+  border-color: #2563eb;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.recommendation-detail {
+  margin-top: 18px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-title-row h2,
+.section-title-row p {
+  margin: 0 0 6px;
+}
+
+.section-title-row select {
+  min-width: 120px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.item-form {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+}
+
+.wide-field {
+  grid-column: span 2;
+}
+
+.recommendation-table {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 80px minmax(180px, 1.5fr) 110px minmax(130px, 1fr) minmax(130px, 1fr) 90px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.table-head {
+  color: #475569;
+  background: #f1f5f9;
+  font-weight: 800;
+}
+
+.table-row span:nth-child(2) {
+  display: grid;
+  gap: 4px;
+}
+
+.danger-button {
+  padding: 8px 12px;
+  background: #dc2626;
+}
+
+@media (max-width: 920px) {
+  .recommendation-layout,
+  .table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .wide-field {
+    grid-column: auto;
+  }
 }

@@ -18,6 +18,7 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type RecommendationPoolRecord = Record<string, unknown>;
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +165,31 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getRecommendationPools(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/recommendation/pools${toQuery(params)}`);
+    return adaptList<RecommendationPoolRecord>(payload, ['pools', 'recommendationPools']);
+  }
+
+  async createRecommendationPool(data: unknown) {
+    const payload = await this.post<ApiEnvelope<RecommendationPoolRecord>>('/admin/recommendation/pools', data);
+    return unwrapData<RecommendationPoolRecord>(payload);
+  }
+
+  async updateRecommendationPool(id: string, data: unknown) {
+    const payload = await this.put<ApiEnvelope<RecommendationPoolRecord>>(`/admin/recommendation/pools/${id}`, data);
+    return unwrapData<RecommendationPoolRecord>(payload);
+  }
+
+  async addRecommendationPoolItem(poolId: string, data: unknown) {
+    const payload = await this.post<ApiEnvelope<RecommendationPoolRecord>>(`/admin/recommendation/pools/${poolId}/items`, data);
+    return unwrapData<RecommendationPoolRecord>(payload);
+  }
+
+  async removeRecommendationPoolItem(poolId: string, itemId: string) {
+    const payload = await this.delete<ApiEnvelope<{ success?: boolean }>>(`/admin/recommendation/pools/${poolId}/items/${itemId}`);
+    return unwrapData<{ success?: boolean }>(payload);
   }
 }
 
