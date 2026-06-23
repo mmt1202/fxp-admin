@@ -15,6 +15,7 @@ export type AdminModule = {
   endpoints: AdminEndpoint[];
   permission: AdminPermission;
   element?: ReactNode;
+  module: 'dashboard' | 'users' | 'properties' | 'reviews' | 'moderation' | 'config' | 'cms';
 };
 
 export const adminModules: AdminModule[] = [
@@ -81,6 +82,7 @@ export const adminModules: AdminModule[] = [
     description: '配置后台权限、业务字典、审核策略与接口参数。',
     endpoints: [],
   },
+  { path: '/cms', label: '内容 CMS', icon: '📝', description: '管理官方文章、Markdown 内容、预览以及发布状态。', module: 'cms' },
   { path: '/properties', label: '房源管理', icon: '🏠', description: '维护房源基础信息、上下架状态、区域与配套标签。' },
   { path: '/reviews', label: '评价管理', icon: '⭐', description: '查看房源评价、评分维度、内容质量与互动数据。' },
   { path: '/membership/plans', label: '会员套餐', icon: '💎', description: '配置会员套餐、价格、有效期、AI 次数额度与启停状态。' },

@@ -5,6 +5,7 @@ import { ContentModeration } from '../pages/ContentModeration';
 import { AnalyticsPage, DashboardPage } from '../pages/AnalyticsPages';
 import { ModulePage } from '../pages/ModulePage';
 import { RecommendationPools } from '../pages/RecommendationPools';
+import { CmsArticles } from '../pages/CmsArticles';
 import { SystemConfig } from '../pages/SystemConfig';
 import { RiskConfig } from '../pages/RiskConfig';
 import { UserDetailPage } from '../pages/UserDetailPage';
@@ -120,4 +121,19 @@ export const router = createBrowserRouter([
         })),
       ],
     },
+{
+    path: '/',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      ...adminModules.map((module) => ({
+        path: module.path.slice(1),
+        element: module.module === 'config'
+          ? <SystemConfig />
+          : module.module === 'cms'
+            ? <CmsArticles />
+            : <ModulePage title={module.label} description={module.description} module={module.module} />,
+      })),
+    ],
+  },
 ]);
