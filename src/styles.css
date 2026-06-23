@@ -2261,3 +2261,137 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+.system-health-page h1 {
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.health-hero,
+.health-check-heading,
+.health-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.health-hero p,
+.health-check-card p,
+.health-summary p {
+  margin: 0;
+  color: #64748b;
+}
+
+.health-alert {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  color: #b91c1c;
+  background: #fef2f2;
+  font-weight: 700;
+}
+
+.health-summary {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-left-width: 6px;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.health-summary span {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.health-summary strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.health-check-card {
+  min-height: 150px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-left-width: 6px;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.health-check-card h3 {
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 17px;
+}
+
+.health-badge {
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status-healthy {
+  border-left-color: #16a34a;
+}
+
+.health-badge.status-healthy {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-warning {
+  border-left-color: #f59e0b;
+}
+
+.health-badge.status-warning {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status-error {
+  border-left-color: #dc2626;
+}
+
+.health-badge.status-error {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.health-error {
+  margin-top: 18px !important;
+  color: #b91c1c !important;
+  font-weight: 700;
+}
+
+.health-ok {
+  margin-top: 18px !important;
+  color: #15803d !important;
+  font-weight: 700;
+}
+
+.health-empty {
+  grid-column: 1 / -1;
+  padding: 28px;
+  border: 1px dashed #bfdbfe;
+  border-radius: 18px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-weight: 700;
+}

@@ -11,6 +11,7 @@ import { RiskConfig } from '../pages/RiskConfig';
 import { UserDetailPage } from '../pages/UserDetailPage';
 import { UserListPage } from '../pages/UserListPage';
 import { MembershipPlans } from '../pages/MembershipPlans';
+import { SystemHealth } from '../pages/SystemHealth';
 import { adminModules } from './modules';
 import { PermissionRoute } from './PermissionRoute';
 
@@ -136,4 +137,17 @@ export const router = createBrowserRouter([
       })),
     ],
   },
+  {
+      path: '/',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <Navigate to="/dashboard" replace /> },
+        ...adminModules.map((module) => ({
+          path: module.path.slice(1),
+          element: module.path === '/system-health'
+            ? <SystemHealth />
+            : <ModulePage title={module.label} description={module.description} />,
+        })),
+      ],
+    },
 ]);

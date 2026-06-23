@@ -88,6 +88,8 @@ export const adminModules: AdminModule[] = [
   { path: '/membership/plans', label: '会员套餐', icon: '💎', description: '配置会员套餐、价格、有效期、AI 次数额度与启停状态。' },
   { path: '/regional-heat', label: '区域热度', icon: '🔥', description: '按城市、区域与小区分析房源、评价、AI 评房和用户互动热度。', element: createElement(RegionalHeatPage) },
   { path: '/moderation', label: '举报/审核管理', icon: '🛡️', description: '处理举报线索、内容审核、申诉与处置记录。' },
+  { path: '/system-health', label: '系统监控', icon: '🟢', description: '查看 API、数据库、Redis、队列、AI、支付回调与推送服务健康状态。' },
+  { path: '/settings', label: '系统配置', icon: '⚙️', description: '配置后台权限、业务字典、审核策略与接口参数。' },
   { path: '/risk', label: '风控配置', icon: '🚦', description: '维护敏感词库、风控规则、命中记录与待审核策略。' },
   { path: '/reports', label: '举报/审核管理', icon: '🛡️', description: '处理举报线索、内容审核、申诉与处置记录。', permission: 'reports:view' },
   { path: '/orders', label: '订单管理', icon: '🧾', description: '查看订单、支付状态、退款进度与履约记录。', permission: 'orders:view' },
