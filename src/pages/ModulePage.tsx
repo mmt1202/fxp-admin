@@ -3,10 +3,14 @@ import { apiClient } from '../api/client';
 import type { AdminModule } from '../routes/modules';
 import {type AdminListResult, type DashboardStats, type DashboardTrendPoint } from '../api/client';
 
+import { useAuthStore } from '../store/auth';
+import type { AdminPermission } from '../types/admin';
+
 type ModulePageProps = {
   title: string;
   description: string;
   module: AdminModule['module'];
+  permission: AdminPermission;
 };
 
 type LoadState = {

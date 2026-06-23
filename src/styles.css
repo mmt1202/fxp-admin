@@ -830,3 +830,123 @@ tr:last-child td {
   border-radius: 16px;
   background: #f8fafc;
 }
+
+.loading-state,
+.empty-state {
+  padding: 28px;
+  border-radius: 16px;
+  color: #475569;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-heading h1 {
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.notice {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.admin-user-form {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.admin-user-form input,
+.admin-user-form select {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 11px 12px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.switch-line,
+.permission-chip {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #475569;
+}
+
+.permission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.permission-chip {
+  padding: 10px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.form-actions,
+.permission-actions,
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.permission-actions {
+  margin-top: 24px;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #475569;
+  background: #f8fafc;
+}
+
+td span {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 13px;
+}
