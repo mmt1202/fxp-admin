@@ -25,6 +25,7 @@ export const adminModules: AdminModule[] = [
       { method: 'GET', path: '/admin/dashboard/trend', description: '获取后台数据看板趋势数据。' },
     ],
   },
+  { path: '/analytics', label: '数据分析', icon: '📈', description: '按时间范围分析用户、房源、会员转化与 AI 评房数据。' },
   {
     path: '/users',
     label: '用户管理',
