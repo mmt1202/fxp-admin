@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../api/client';
-import type { AdminModule } from '../routes/modules';
+import type { ModuleKey } from '../routes/modules';
 
 type ModulePageProps = {
   title: string;
   description: string;
-  module: AdminModule['module'];
+  module: ModuleKey;
 };
 
 type LoadState = {
@@ -14,7 +14,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<ModuleKey, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -36,7 +36,11 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
+    Promise.resolve().then(() => {
+      if (!ignore) {
+        setState({ loading: true });
+      }
+    });
     loader()
       .then((data) => {
         if (!ignore) {
