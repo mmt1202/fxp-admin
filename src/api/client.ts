@@ -6,7 +6,7 @@ type RequestOptions = RequestInit & {
   skipAuth?: boolean;
 };
 
-type ApiEnvelope<T> = T | {
+export type ApiEnvelope<T> = T | {
   code?: number;
   message?: string;
   data?: T;
@@ -42,7 +42,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function unwrapData<T>(payload: ApiEnvelope<T>): T {
+export function unwrapData<T>(payload: ApiEnvelope<T>): T {
   if (isRecord(payload) && 'data' in payload) {
     return payload.data as T;
   }
@@ -54,7 +54,7 @@ function asArray<T>(value: unknown): T[] {
   return Array.isArray(value) ? value as T[] : [];
 }
 
-function adaptList<T>(payload: unknown, collectionKeys: string[]): ListResult<T> {
+export function adaptList<T>(payload: unknown, collectionKeys: string[]): ListResult<T> {
   const body = unwrapData(payload);
 
   if (Array.isArray(body)) {
@@ -73,7 +73,7 @@ function adaptList<T>(payload: unknown, collectionKeys: string[]): ListResult<T>
   return { items, total, page, pageSize };
 }
 
-function toQuery(params?: Record<string, string | number | boolean | undefined>) {
+export function toQuery(params?: Record<string, string | number | boolean | undefined>) {
   const search = new URLSearchParams();
   Object.entries(params ?? {}).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -134,6 +134,10 @@ export class ApiClient {
 
   delete<T>(path: string, options?: RequestOptions) {
     return request<T>(path, { ...options, method: 'DELETE' });
+  }
+
+  toQuery(params?: Record<string, string | number | boolean | undefined>) {
+    return toQuery(params);
   }
 
   async getDashboard() {
