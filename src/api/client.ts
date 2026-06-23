@@ -18,6 +18,19 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type UserLifecycleUser = Record<string, unknown>;
+export type LifecycleStage = {
+  key: string;
+  label: string;
+  value: number;
+  description?: string;
+  users?: UserLifecycleUser[];
+};
+export type UserLifecycle = {
+  stages: LifecycleStage[];
+  startDate?: string;
+  endDate?: string;
+};
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +177,38 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getUserLifecycle(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/analytics/user-lifecycle${toQuery(params)}`);
+    const body = unwrapData(payload);
+
+    if (Array.isArray(body)) {
+      return { stages: body as LifecycleStage[] };
+    }
+
+    if (isRecord(body)) {
+      const stages = Array.isArray(body.stages)
+        ? body.stages as LifecycleStage[]
+        : Array.isArray(body.lifecycle)
+          ? body.lifecycle as LifecycleStage[]
+          : Object.entries(body)
+              .filter(([, value]) => typeof value === 'number')
+              .map(([key, value]) => ({ key, label: key, value: value as number }));
+
+      return {
+        stages,
+        startDate: typeof body.startDate === 'string' ? body.startDate : undefined,
+        endDate: typeof body.endDate === 'string' ? body.endDate : undefined,
+      };
+    }
+
+    return { stages: [] };
+  }
+
+  async getUserLifecycleUsers(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/analytics/user-lifecycle/users${toQuery(params)}`);
+    return adaptList<UserLifecycleUser>(payload, ['users', 'items']);
   }
 }
 
