@@ -5,4 +5,11 @@ export const adminModules = [
   { path: '/reviews', label: '评价管理', icon: '⭐', description: '查看房源评价、评分维度、内容质量与互动数据。' },
   { path: '/moderation', label: '举报/审核管理', icon: '🛡️', description: '处理举报线索、内容审核、申诉与处置记录。' },
   { path: '/config', label: '系统配置', icon: '⚙️', description: '管理 App 公告、业务开关、最低版本与强制更新策略。' },
-];
+  ]
+export type AdminModule = {
+  path: string;
+  label: string;
+  icon: string;
+  description: string;
+  module: 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'community-reports';
+};
