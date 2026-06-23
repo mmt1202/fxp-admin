@@ -412,6 +412,82 @@ button:disabled {
   font-weight: 700;
 }
 
+.data-grid div {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.data-grid strong {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.data-grid span {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.table-wrap {
+  margin-top: 24px;
+  overflow: auto;
+}
+
+.table-summary,
+.empty-state,
+.error-state {
+  color: #64748b;
+  margin-top: 20px;
+}
+
+.error-state {
+  color: #dc2626;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #475569;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+td {
+  color: #0f172a;
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+
+.trend-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 16px;
+}
+
+.trend-list pre {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  color: #334155;
+  margin: 0;
+  overflow: auto;
+  padding: 14px;
+}
+
 .status-message.saved {
   color: #047857;
   background: #d1fae5;
