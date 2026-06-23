@@ -290,6 +290,8 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +312,145 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+
+.field-label select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.content-quality-page {
+  display: grid;
+  gap: 24px;
+}
+
+.quality-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.compact-field {
+  min-width: 220px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.metric-grid div {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  background: #eff6ff;
+}
+
+.metric-grid strong {
+  color: #1d4ed8;
+  font-size: 30px;
+}
+
+.metric-grid span {
+  color: #475569;
+  font-weight: 700;
+}
+
+.quality-section {
+  display: grid;
+  gap: 14px;
+}
+
+.quality-section h2,
+.quality-review-panel h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.quality-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.quality-card,
+.quality-review-panel {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.quality-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.score-pill {
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #fff;
+}
+
+.score-pill.good {
+  background: #059669;
+}
+
+.score-pill.medium {
+  background: #d97706;
+}
+
+.score-pill.bad {
+  background: #dc2626;
+}
+
+.quality-card h3,
+.quality-card p,
+.quality-review-panel p {
+  margin: 0;
+}
+
+.dimension-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dimension-grid span {
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #334155;
+  background: #e2e8f0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quality-review-panel {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  align-items: start;
+}
+
+.review-form {
+  display: grid;
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .quality-review-panel {
+    grid-template-columns: 1fr;
+  }
 }
