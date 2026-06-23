@@ -6,6 +6,8 @@ import {type AdminListResult, type DashboardStats, type DashboardTrendPoint } fr
 import { useAuthStore } from '../store/auth';
 import type { AdminPermission } from '../types/admin';
 
+type LoadableModule = Exclude<AdminModule['module'], 'config' | 'recommendation-pools'>;
+
 type ModulePageProps = {
   title: string;
   description: string;
@@ -19,7 +21,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<LoadableModule, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -41,7 +43,11 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
+    void Promise.resolve().then(() => {
+      if (!ignore) {
+        setState({ loading: true });
+      }
+    });
     loader()
       .then((data) => {
         if (!ignore) {

@@ -39,6 +39,7 @@ export const adminModules: AdminModule[] = [
       { method: 'PUT', path: '/admin/users/:userId/status', description: '更新指定用户账号状态。' },
     ],
   },
+  { path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。', module: 'recommendation-pools' },
   {
     path: '/memberships',
     label: '会员管理',
