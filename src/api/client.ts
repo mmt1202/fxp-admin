@@ -19,6 +19,32 @@ export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
 export type RecommendationPoolRecord = Record<string, unknown>;
+export type Property = Record<string, unknown>;
+export type Review = Record<string, unknown>;
+export type ModerationReport = Record<string, unknown>;
+
+export type CampaignStatus = 'draft' | 'active' | 'paused' | 'ended';
+
+export type MarketingCampaign = {
+  id: string;
+  name: string;
+  type: string;
+  startTime: string;
+  endTime: string;
+  status: CampaignStatus;
+  targetUsers: string;
+  rewardType: string;
+  rewardQuantity: number;
+  triggerCondition: string;
+  metrics?: {
+    participants: number;
+    rewardsIssued: number;
+    conversions: number;
+    orderAmount: number;
+  };
+};
+
+export type MarketingCampaignPayload = Omit<MarketingCampaign, 'id' | 'metrics'>;
 
 export type ListResult<T> = {
   items: T[];
@@ -152,19 +178,43 @@ export class ApiClient {
     return adaptList<AdminUser>(payload, ['users']);
   }
 
-  async getOrders(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/orders${toQuery(params)}`);
-    return adaptList<AdminOrder>(payload, ['orders']);
+  async getProperties(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/properties${toQuery(params)}`);
+    return adaptList<Property>(payload, ['properties']);
   }
 
-  async getAiStats(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<AiStats>>(`/admin/ai-stats${toQuery(params)}`);
-    return unwrapData<AiStats>(payload);
+  async getReviews(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/reviews${toQuery(params)}`);
+    return adaptList<Review>(payload, ['reviews']);
   }
 
-  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
-    return adaptList<CommunityReport>(payload, ['reports']);
+  async getModerationReports(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/moderation/reports${toQuery(params)}`);
+    return adaptList<ModerationReport>(payload, ['reports']);
+  }
+
+  async getMarketingCampaigns(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/marketing/campaigns${toQuery(params)}`);
+    return adaptList<MarketingCampaign>(payload, ['campaigns', 'items']);
+  }
+
+  async createMarketingCampaign(data: MarketingCampaignPayload) {
+    const payload = await this.post<ApiEnvelope<MarketingCampaign>>('/admin/marketing/campaigns', data);
+    return unwrapData<MarketingCampaign>(payload);
+  }
+
+  async updateMarketingCampaign(id: string, data: MarketingCampaignPayload) {
+    const payload = await this.put<ApiEnvelope<MarketingCampaign>>(`/admin/marketing/campaigns/${id}`, data);
+    return unwrapData<MarketingCampaign>(payload);
+  }
+
+  async deleteMarketingCampaign(id: string) {
+    return this.delete<ApiEnvelope<{ success: boolean }>>(`/admin/marketing/campaigns/${id}`);
+  }
+
+  async updateMarketingCampaignStatus(id: string, status: CampaignStatus) {
+    const payload = await this.put<ApiEnvelope<MarketingCampaign>>(`/admin/marketing/campaigns/${id}/status`, { status });
+    return unwrapData<MarketingCampaign>(payload);
   }
 
   async getRecommendationPools(params?: Record<string, string | number | boolean | undefined>) {
