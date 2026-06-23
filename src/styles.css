@@ -17,7 +17,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -290,6 +292,8 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +314,172 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+
+.cms-page {
+  display: grid;
+  gap: 22px;
+}
+
+.cms-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 160px auto auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.cms-toolbar input,
+.cms-toolbar select,
+.field-label select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+.cms-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(420px, 1.2fr) minmax(280px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.article-list-panel,
+.editor-panel,
+.preview-panel {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.article-list-panel h2,
+.editor-panel h2,
+.preview-panel h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.article-row {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.article-row.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+}
+
+.article-main {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+}
+
+.article-main span,
+.article-main small,
+.muted-text {
+  color: #64748b;
+}
+
+.article-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.article-actions button {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.markdown-editor {
+  min-height: 260px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.preview-panel img,
+.cover-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.cover-placeholder {
+  display: grid;
+  place-items: center;
+  border: 1px dashed #93c5fd;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-weight: 700;
+}
+
+.preview-panel h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.preview-panel p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-list span {
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.markdown-preview {
+  overflow: auto;
+  max-height: 360px;
+  margin: 0;
+  padding: 16px;
+  border-radius: 14px;
+  color: #334155;
+  background: #fff;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 1200px) {
+  .cms-grid,
+  .cms-toolbar {
+    grid-template-columns: 1fr;
+  }
 }

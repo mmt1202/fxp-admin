@@ -14,7 +14,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<Exclude<AdminModule['module'], 'config' | 'cms'>, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -24,19 +24,23 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => apiClient.get('/admin/properties'),
+  reviews: () => apiClient.get('/admin/reviews'),
+  moderation: () => apiClient.get('/admin/moderation'),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
   const [state, setState] = useState<LoadState>({ loading: true });
-  const loader = useMemo(() => moduleLoaders[module], [module]);
+  const loader = useMemo(() => moduleLoaders[module as Exclude<AdminModule['module'], 'config' | 'cms'>], [module]);
 
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
+    Promise.resolve().then(() => {
+      if (!ignore) {
+        setState({ loading: true });
+      }
+    });
     loader()
       .then((data) => {
         if (!ignore) {
