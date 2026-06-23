@@ -17,7 +17,30 @@ export type DashboardTrendPoint = Record<string, unknown>;
 export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
-export type CommunityReport = Record<string, unknown>;
+export type RecallTaskType = 'push' | 'sms' | 'in_app' | 'email';
+export type RecallAudience = 'inactive_7_days' | 'inactive_30_days' | 'membership_expiring' | 'ai_quota_used' | 'property_created_no_ai';
+export type RecallTaskStatus = 'draft' | 'pending' | 'running' | 'completed' | 'failed';
+
+export type RecallTask = {
+  id: string | number;
+  name: string;
+  type: RecallTaskType;
+  audience: RecallAudience;
+  title: string;
+  content: string;
+  status: RecallTaskStatus;
+  estimatedCount?: number;
+  sentCount?: number;
+  successCount?: number;
+  failedCount?: number;
+  executedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type RecallTaskPayload = Omit<RecallTask, 'id' | 'status' | 'sentCount' | 'successCount' | 'failedCount' | 'executedAt' | 'createdAt' | 'updatedAt'> & {
+  status?: RecallTaskStatus;
+};
 
 export type ListResult<T> = {
   items: T[];
@@ -161,9 +184,24 @@ export class ApiClient {
     return unwrapData<AiStats>(payload);
   }
 
-  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
-    return adaptList<CommunityReport>(payload, ['reports']);
+  async getRecallTasks(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/marketing/recall-tasks${toQuery(params)}`);
+    return adaptList<RecallTask>(payload, ['tasks', 'recallTasks', 'items']);
+  }
+
+  async createRecallTask(data: RecallTaskPayload) {
+    const payload = await this.post<ApiEnvelope<RecallTask>>('/admin/marketing/recall-tasks', data);
+    return unwrapData<RecallTask>(payload);
+  }
+
+  async updateRecallTask(id: RecallTask['id'], data: RecallTaskPayload) {
+    const payload = await this.put<ApiEnvelope<RecallTask>>(`/admin/marketing/recall-tasks/${id}`, data);
+    return unwrapData<RecallTask>(payload);
+  }
+
+  async executeRecallTask(id: RecallTask['id']) {
+    const payload = await this.post<ApiEnvelope<RecallTask>>(`/admin/marketing/recall-tasks/${id}/execute`);
+    return unwrapData<RecallTask>(payload);
   }
 }
 
