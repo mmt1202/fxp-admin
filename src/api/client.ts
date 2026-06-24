@@ -82,6 +82,52 @@ export type RecallTask = {
 export type RecallTaskPayload = Omit<RecallTask, 'id' | 'status' | 'sentCount' | 'successCount' | 'failedCount' | 'executedAt' | 'createdAt' | 'updatedAt'> & {
   status?: RecallTaskStatus;
 };
+
+export type ContentType = 'community_note' | 'comment' | 'property_review' | 'ai_report';
+export type QualityRiskLevel = 'high' | 'medium' | 'low';
+export type ReviewStatus = 'pending' | 'approved' | 'rejected' | 'adjusted';
+
+export type ContentQualityScore = {
+  contentId: string;
+  contentType: ContentType;
+  title: string;
+  authorName?: string;
+  qualityScore: number;
+  riskLevel: QualityRiskLevel;
+  reviewStatus: ReviewStatus;
+  dimensions: {
+    completeness: number;
+    imageCount: number;
+    textLength: number;
+    sensitiveHits: number;
+    reportCount: number;
+    likeCount: number;
+    favoriteCount: number;
+    shareCount: number;
+    suspectedAd: boolean;
+  };
+  generatedAt?: string;
+  reviewedAt?: string;
+  reviewer?: string;
+  reviewNote?: string;
+};
+
+export type ContentQualityList = ListResult<ContentQualityScore> & {
+  highQuality: ContentQualityScore[];
+  riskItems: ContentQualityScore[];
+};
+
+export type ContentQualityFilters = {
+  contentType?: ContentType | 'all';
+  riskLevel?: QualityRiskLevel;
+  reviewStatus?: ReviewStatus;
+};
+
+export type ContentQualityReviewPayload = {
+  qualityScore: number;
+  reviewStatus: ReviewStatus;
+  reviewNote?: string;
+};
 export type ListResult<T> = {
   items: T[];
   total?: number;
@@ -327,6 +373,32 @@ export class ApiClient {
   async getUserLifecycleUsers(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/analytics/user-lifecycle/users${toQuery(params)}`);
     return adaptList<UserLifecycleUser>(payload, ['users', 'items']);
+  }
+
+  async getContentQuality(params?: ContentQualityFilters) {
+    const query = {
+      ...params,
+      contentType: params?.contentType === 'all' ? undefined : params?.contentType,
+    };
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/content-quality${toQuery(query)}`);
+    const body = unwrapData(payload);
+    const list = adaptList<ContentQualityScore>(payload, ['items', 'scores', 'contentQuality']);
+
+    return {
+      ...list,
+      highQuality: isRecord(body) ? asArray<ContentQualityScore>(body.highQuality) : [],
+      riskItems: isRecord(body) ? asArray<ContentQualityScore>(body.riskItems) : [],
+    };
+  }
+
+  async getContentQualityDetail(contentId: string) {
+    const payload = await this.get<ApiEnvelope<ContentQualityScore>>(`/admin/content-quality/${contentId}`);
+    return unwrapData<ContentQualityScore>(payload);
+  }
+
+  async reviewContentQuality(contentId: string, data: ContentQualityReviewPayload) {
+    const payload = await this.put<ApiEnvelope<ContentQualityScore>>(`/admin/content-quality/${contentId}/review`, data);
+    return unwrapData<ContentQualityScore>(payload);
   }
 }
 

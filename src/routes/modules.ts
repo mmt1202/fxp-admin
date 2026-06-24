@@ -40,6 +40,7 @@ export const adminModules: AdminModule[] = [
       { method: 'PUT', path: '/admin/users/:userId/status', description: '更新指定用户账号状态。' },
     ],
   },
+  { path: '/content-quality', label: '内容质量', icon: '🏆', description: '查看社区笔记、评论、房源评价与 AI 报告的质量评分和复核状态。', module: 'content-quality' },
   { path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。', module: 'recommendation-pools' },
   {
     path: '/memberships',

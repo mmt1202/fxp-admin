@@ -13,7 +13,7 @@ type ModulePageProps = {
   description: string;
   module: AdminModule['module'];
   permission: AdminPermission;
-  module: Exclude<AdminModule['module'], 'config' | 'user-lifecycle'>;
+  module: Exclude<AdminModule['module'], 'config' | 'user-lifecycle' | 'content-quality'>;
 };
 
 type LoadState = {
@@ -22,7 +22,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<Exclude<AdminModule['module'], 'config' | 'user-lifecycle'>, () => Promise<unknown>> = {
+const moduleLoaders: Record<AdminModule['module'],'config' | 'user-lifecycle' | 'content-quality', () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),

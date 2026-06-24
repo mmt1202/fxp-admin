@@ -15,9 +15,9 @@ import { UserListPage } from '../pages/UserListPage';
 import { MembershipPlans } from '../pages/MembershipPlans';
 import { SystemHealth } from '../pages/SystemHealth';
 import { UserLifecycle } from '../pages/UserLifecycle';
-import { adminModules } from './modules';
 import { PermissionRoute } from './PermissionRoute';
 import { adminModules, type AdminModule } from './modules';
+import { ContentQuality } from '../pages/ContentQuality';
 
 function renderModulePage(module: AdminModule) {
   switch (module.module) {
@@ -25,6 +25,8 @@ function renderModulePage(module: AdminModule) {
       return <SystemConfig />;
     case 'marketing':
       return <MarketingCampaigns />;
+    case 'content-quality' :
+        <ContentQuality />
     default:
       return <ModulePage title={module.label} description={module.description} module={module.module} />;
   }
@@ -32,6 +34,17 @@ function renderModulePage(module: AdminModule) {
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
+  {
+      path: '/',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <Navigate to="/dashboard" replace /> },
+        ...adminModules.map((module) => ({
+          path: module.path.slice(1),
+          element: renderModule(module),
+        })),
+      ],
+    },
   {
     path: '/',
     element: <AdminLayout />,
