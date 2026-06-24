@@ -365,7 +365,8 @@ button:disabled {
 }
 
 .field-label input,
-.field-label textarea {
+.field-label textarea,
+.field-label select {
   width: 100%;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
@@ -510,7 +511,7 @@ td {
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .api-panel {
@@ -1118,7 +1119,7 @@ td span {
   background: #f1f5f9;
 }
 
-.tabs button.active {
+.tabs button .active{
   color: #fff;
   background: #2563eb;
 }
@@ -2642,4 +2643,157 @@ textarea {
 .empty-cell {
   color: #64748b;
   text-align: center !important;
+}
+
+.recall-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(420px, 1.2fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.recall-form {
+  position: sticky;
+  top: 24px;
+}
+
+.estimate-card {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff, #f8fafc);
+}
+
+.estimate-card span,
+.estimate-card small,
+.task-card p,
+.task-metrics dt {
+  color: #64748b;
+}
+
+.estimate-card strong {
+  color: #1d4ed8;
+  font-size: 28px;
+}
+
+.task-results {
+  display: grid;
+  gap: 16px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-title-row h2,
+.task-card h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.empty-state {
+  padding: 26px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  color: #64748b;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.task-list {
+  display: grid;
+  gap: 16px;
+}
+
+.task-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 6%);
+}
+
+.status-badge {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #475569;
+  background: #e2e8f0;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.status-badge.running,
+.status-badge.pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status-badge.completed {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-badge.failed {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.task-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.task-metrics div {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.task-metrics dt,
+.task-metrics dd {
+  margin: 0;
+}
+
+.task-metrics dd {
+  margin-top: 4px;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.task-content {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 1080px) {
+  .recall-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .recall-form {
+    position: static;
+  }
 }

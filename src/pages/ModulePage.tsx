@@ -54,6 +54,12 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
         setState({ loading: true });
       }
     });
+
+    queueMicrotask(() => {
+      if (!ignore) {
+        setState({ loading: true });
+      }
+    });
     loader()
       .then((data) => {
         if (!ignore) {

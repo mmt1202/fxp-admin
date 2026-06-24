@@ -82,6 +82,7 @@ export const adminModules: AdminModule[] = [
     description: '配置后台权限、业务字典、审核策略与接口参数。',
     endpoints: [],
   },
+  { path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。', module: 'recall-tasks' },
   { path: '/cms', label: '内容 CMS', icon: '📝', description: '管理官方文章、Markdown 内容、预览以及发布状态。', module: 'cms' },
   { path: '/properties', label: '房源管理', icon: '🏠', description: '维护房源基础信息、上下架状态、区域与配套标签。' },
   { path: '/reviews', label: '评价管理', icon: '⭐', description: '查看房源评价、评分维度、内容质量与互动数据。' },
