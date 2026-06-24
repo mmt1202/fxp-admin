@@ -19,6 +19,37 @@ export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
 
+export type PaymentChannel = 'wechat' | 'alipay' | 'stripe' | 'apple_pay' | 'manual' | string;
+export type PaymentRecord = {
+  id?: string | number;
+  localOrderNo?: string;
+  orderNo?: string;
+  thirdPartyTransactionNo?: string;
+  transactionNo?: string;
+  channel?: PaymentChannel;
+  amount?: number;
+  paidAmount?: number;
+  localStatus?: string;
+  thirdPartyStatus?: string;
+  paidAt?: string;
+  createdAt?: string;
+};
+export type ReconciliationRecord = PaymentRecord & {
+  differenceReason?: string;
+  diffReason?: string;
+  result?: 'success' | 'failed' | 'exception' | string;
+  reconciledAt?: string;
+};
+export type ReconciliationSummary = {
+  success: number;
+  failed: number;
+  exception: number;
+  total?: number;
+};
+export type ReconciliationResult = ListResult<ReconciliationRecord> & {
+  summary: ReconciliationSummary;
+};
+
 export type ListResult<T> = {
   items: T[];
   total?: number;
@@ -73,7 +104,9 @@ function adaptList<T>(payload: unknown, collectionKeys: string[]): ListResult<T>
   return { items, total, page, pageSize };
 }
 
-function toQuery(params?: Record<string, string | number | boolean | undefined>) {
+export type QueryParams = Record<string, string | number | boolean | undefined>;
+
+function toQuery(params?: QueryParams) {
   const search = new URLSearchParams();
   Object.entries(params ?? {}).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -140,30 +173,68 @@ export class ApiClient {
     return unwrapData<DashboardStats>(await this.get<ApiEnvelope<DashboardStats>>('/admin/dashboard'));
   }
 
-  async getDashboardTrend(params?: Record<string, string | number | boolean | undefined>) {
+  async getDashboardTrend(params?: QueryParams) {
     const payload = await this.get<ApiEnvelope<DashboardTrendPoint[] | { trend?: DashboardTrendPoint[] }>>(`/admin/dashboard/trend${toQuery(params)}`);
     const body = unwrapData(payload);
     return Array.isArray(body) ? body : asArray<DashboardTrendPoint>(isRecord(body) ? body.trend : undefined);
   }
 
-  async getUsers(params?: Record<string, string | number | boolean | undefined>) {
+  async getUsers(params?: QueryParams) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/users${toQuery(params)}`);
     return adaptList<AdminUser>(payload, ['users']);
   }
 
-  async getOrders(params?: Record<string, string | number | boolean | undefined>) {
+  async getOrders(params?: QueryParams) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/orders${toQuery(params)}`);
     return adaptList<AdminOrder>(payload, ['orders']);
   }
 
-  async getAiStats(params?: Record<string, string | number | boolean | undefined>) {
+  async getAiStats(params?: QueryParams) {
     const payload = await this.get<ApiEnvelope<AiStats>>(`/admin/ai-stats${toQuery(params)}`);
     return unwrapData<AiStats>(payload);
   }
 
-  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
+  async getCommunityReports(params?: QueryParams) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getPaymentRecords(params?: QueryParams) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/finance/payment-records${toQuery(params)}`);
+    return adaptList<PaymentRecord>(payload, ['items', 'records', 'paymentRecords']);
+  }
+
+  async getReconciliation(params?: QueryParams): Promise<ReconciliationResult> {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/finance/reconciliation${toQuery(params)}`);
+    const list = adaptList<ReconciliationRecord>(payload, ['items', 'records', 'reconciliationRecords']);
+    const body = unwrapData(payload);
+    const summary = isRecord(body) && isRecord(body.summary)
+      ? {
+        success: Number(body.summary.success ?? 0),
+        failed: Number(body.summary.failed ?? 0),
+        exception: Number(body.summary.exception ?? 0),
+        total: typeof body.summary.total === 'number' ? body.summary.total : list.total,
+      }
+      : list.items.reduce<ReconciliationSummary>((acc, item) => {
+        const result = item.result ?? (item.differenceReason || item.diffReason ? 'exception' : item.localStatus);
+        if (result === 'success' || result === 'paid' || result === 'matched') acc.success += 1;
+        else if (result === 'failed' || result === 'fail') acc.failed += 1;
+        else acc.exception += 1;
+        acc.total = (acc.total ?? 0) + 1;
+        return acc;
+      }, { success: 0, failed: 0, exception: 0, total: 0 });
+
+    return { ...list, summary };
+  }
+
+  async runReconciliation(params?: QueryParams) {
+    const payload = await this.post<ApiEnvelope<unknown>>('/admin/finance/reconciliation/run', params ?? {});
+    return unwrapData(payload);
+  }
+
+  async repairReconciliation(orderNo: string) {
+    const payload = await this.post<ApiEnvelope<unknown>>('/admin/finance/reconciliation/repair', { orderNo });
+    return unwrapData(payload);
   }
 }
 
