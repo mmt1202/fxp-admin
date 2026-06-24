@@ -5,7 +5,7 @@ import type { AdminModule } from '../routes/modules';
 type ModulePageProps = {
   title: string;
   description: string;
-  module: AdminModule['module'];
+  module: Exclude<AdminModule['module'], 'config' | 'login-security'>;
 };
 
 type LoadState = {
@@ -14,7 +14,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<Exclude<AdminModule['module'], 'config' | 'login-security'>, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -24,9 +24,9 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => apiClient.get('/admin/properties'),
+  reviews: () => apiClient.get('/admin/reviews'),
+  moderation: () => apiClient.getCommunityReports(),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,7 +36,6 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
     loader()
       .then((data) => {
         if (!ignore) {

@@ -18,6 +18,8 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type LoginLog = Record<string, unknown>;
+export type RiskyLogin = Record<string, unknown>;
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +166,16 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getLoginLogs(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/security/login-logs${toQuery(params)}`);
+    return adaptList<LoginLog>(payload, ['items', 'logs', 'loginLogs']);
+  }
+
+  async getRiskyLogins(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/security/risky-logins${toQuery(params)}`);
+    return adaptList<RiskyLogin>(payload, ['items', 'events', 'riskyLogins']);
   }
 }
 
