@@ -13,7 +13,7 @@ type ModulePageProps = {
   description: string;
   module: AdminModule['module'];
   permission: AdminPermission;
-  module: Exclude<AdminModule['module'], 'config' | 'user-lifecycle' | 'content-quality'>;
+  module: Exclude<AdminModule['module'], moduleType>;
 };
 
 type LoadState = {
@@ -22,7 +22,9 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'],'config' | 'user-lifecycle' | 'content-quality', () => Promise<unknown>> = {
+type moduleType = 'config' | 'user-lifecycle' | 'content-quality'|'recall-tasks'
+
+const moduleLoaders: Record<AdminModule['module'],moduleType, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -44,22 +46,12 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    Promise.resolve().then(() => {
-      if (!ignore) {
-        setState({ loading: true });
-      }
-    });
-    void Promise.resolve().then(() => {
-      if (!ignore) {
-        setState({ loading: true });
-      }
-    });
-
+    setState({ loading: true });
     queueMicrotask(() => {
-      if (!ignore) {
-        setState({ loading: true });
-      }
-    });
+          if (!ignore) {
+            setState({ loading: true });
+          }
+        });
     loader()
       .then((data) => {
         if (!ignore) {
