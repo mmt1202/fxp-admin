@@ -1,4 +1,6 @@
-import { apiClient, ApiEnvelope, ListResult, adaptList, unwrapData } from './client';
+import { apiClient, type ApiEnvelope, type ListResult, adaptList, unwrapData } from './client';
+
+export type PropertyVisibility = 'public' | 'hidden' | 'draft' | 'archived' | boolean;
 
 export type PropertyCompletenessDimension = {
   key: 'basic' | 'address' | 'images' | 'surroundings' | 'reviews' | 'aiReview';
@@ -19,7 +21,7 @@ export type PropertyCompleteness = {
 };
 
 export type AdminProperty = Record<string, unknown> & {
-  id?: string | number;
+  id: string | number;
   name?: string;
   title?: string;
   completenessScore?: number;
@@ -27,31 +29,27 @@ export type AdminProperty = Record<string, unknown> & {
   address?: string;
   city?: string;
   district?: string;
+  area?: string;
   userId?: string | number;
+  userName?: string;
   ownerId?: string | number;
   isPublic?: boolean;
   visibility?: PropertyVisibility;
   status?: string;
+  onlineStatus?: string;
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string | null;
 };
 
-export type PropertyCompletenessListParams = {
-  belowScore?: number;
-  page?: number;
-  pageSize?: number;
-  keyword?: string;
-  userId?: string;
-  isPublic?: string;
+export type AdminPropertyReview = Record<string, unknown> & {
+  id: string | number;
+  userName?: string;
+  rating?: number;
+  content?: string;
 };
 
-export type AdminPropertyListResponse = {
-  items: AdminProperty[];
-  total: number;
-  page: number;
-  pageSize: number;
-};
+export type PropertyListParams = Record<string, string | number | boolean | undefined>;
 
 function normalizeScore(score: unknown) {
   const numberScore = typeof score === 'number' ? score : Number(score);
@@ -83,12 +81,31 @@ function normalizeCompleteness(item: unknown): PropertyCompleteness {
 }
 
 class PropertyApi {
-  async getProperties(params?: PropertyCompletenessListParams): Promise<ListResult<AdminProperty>> {
+  async getProperties(params?: PropertyListParams): Promise<ListResult<AdminProperty>> {
     const payload = await apiClient.get<ApiEnvelope<unknown>>(`/admin/properties${apiClient.toQuery(params)}`);
     return adaptList<AdminProperty>(payload, ['properties', 'items']);
   }
 
-  async getPropertyCompletenessList(params?: PropertyCompletenessListParams): Promise<ListResult<PropertyCompleteness>> {
+  async getProperty(id: string | number): Promise<AdminProperty> {
+    const payload = await apiClient.get<ApiEnvelope<AdminProperty>>(`/admin/properties/${id}`);
+    return unwrapData<AdminProperty>(payload);
+  }
+
+  async getPropertyReviews(id: string | number): Promise<AdminPropertyReview[]> {
+    const payload = await apiClient.get<ApiEnvelope<unknown>>(`/admin/properties/${id}/reviews`);
+    return adaptList<AdminPropertyReview>(payload, ['reviews', 'items']).items;
+  }
+
+  async updateVisibility(id: string | number, isPublic: boolean): Promise<AdminProperty> {
+    const payload = await apiClient.put<ApiEnvelope<AdminProperty>>(`/admin/properties/${id}/visibility`, { isPublic });
+    return unwrapData<AdminProperty>(payload);
+  }
+
+  async deleteProperty(id: string | number) {
+    return apiClient.delete<ApiEnvelope<{ success?: boolean }>>(`/admin/properties/${id}`);
+  }
+
+  async getPropertyCompletenessList(params?: PropertyListParams): Promise<ListResult<PropertyCompleteness>> {
     const payload = await apiClient.get<ApiEnvelope<unknown>>(`/admin/properties/completeness${apiClient.toQuery(params)}`);
     const list = adaptList<unknown>(payload, ['properties', 'items', 'completeness']);
     return { ...list, items: list.items.map(normalizeCompleteness) };
@@ -101,3 +118,8 @@ class PropertyApi {
 }
 
 export const propertyApi = new PropertyApi();
+export const getAdminProperties = (params?: PropertyListParams) => propertyApi.getProperties(params);
+export const getAdminProperty = (id: string | number) => propertyApi.getProperty(id);
+export const getAdminPropertyReviews = (id: string | number) => propertyApi.getPropertyReviews(id);
+export const updateAdminPropertyVisibility = (id: string | number, isPublic: boolean) => propertyApi.updateVisibility(id, isPublic);
+export const deleteAdminProperty = (id: string | number) => propertyApi.deleteProperty(id);

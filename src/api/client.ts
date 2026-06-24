@@ -4,8 +4,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
 
 
+export type QueryParams = Record<string, string | number | boolean | undefined>;
+export type PageResult<T> = ListResult<T>;
+
 type RequestOptions = RequestInit & {
   skipAuth?: boolean;
+  token?: string | null;
+  query?: QueryParams;
 };
 
 export type ApiEnvelope<T> = T | {
@@ -85,30 +90,6 @@ export type MarketingCampaign = {
 };
 
 export type MarketingCampaignPayload = Omit<MarketingCampaign, 'id' | 'metrics'>;
-export type RecallTaskType = 'push' | 'sms' | 'in_app' | 'email';
-export type RecallAudience = 'inactive_7_days' | 'inactive_30_days' | 'membership_expiring' | 'ai_quota_used' | 'property_created_no_ai';
-export type RecallTaskStatus = 'draft' | 'pending' | 'running' | 'completed' | 'failed';
-
-export type RecallTask = {
-  id: string | number;
-  name: string;
-  type: RecallTaskType;
-  audience: RecallAudience;
-  title: string;
-  content: string;
-  status: RecallTaskStatus;
-  estimatedCount?: number;
-  sentCount?: number;
-  successCount?: number;
-  failedCount?: number;
-  executedAt?: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export type RecallTaskPayload = Omit<RecallTask, 'id' | 'status' | 'sentCount' | 'successCount' | 'failedCount' | 'executedAt' | 'createdAt' | 'updatedAt'> & {
-  status?: RecallTaskStatus;
-};
 
 export type ContentType = 'community_note' | 'comment' | 'property_review' | 'ai_report';
 export type QualityRiskLevel = 'high' | 'medium' | 'low';
@@ -161,6 +142,8 @@ export type ListResult<T> = {
   page?: number;
   pageSize?: number;
 };
+
+export type AdminListResult = ListResult<Record<string, unknown>>;
 
 export class ApiError extends Error {
   status: number;
@@ -222,9 +205,9 @@ export function toQuery(params?: Record<string, string | number | boolean | unde
 }
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { skipAuth = false, headers, body, ...init } = options;
-  const token = authState.token;
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const { skipAuth = false, headers, body, query, token: optionToken, ...init } = options;
+  const token = optionToken ?? authState.token;
+  const response = await fetch(`${API_BASE_URL}${path}${toQuery(query)}`, {
     ...init,
     body,
     headers: {
@@ -270,6 +253,14 @@ export class ApiClient {
 
   delete<T>(path: string, options?: RequestOptions) {
     return request<T>(path, { ...options, method: 'DELETE' });
+  }
+
+  patch<T>(path: string, data?: unknown, options?: RequestOptions) {
+    return request<T>(path, {
+      ...options,
+      method: 'PATCH',
+      body: JSON.stringify(data ?? {}),
+    });
   }
 
   toQuery(params?: Record<string, string | number | boolean | undefined>) {
@@ -431,24 +422,20 @@ export class ApiClient {
     const payload = await this.put<ApiEnvelope<ContentQualityScore>>(`/admin/content-quality/${contentId}/review`, data);
     return unwrapData<ContentQualityScore>(payload);
   }
-  async getRecallTasks(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/marketing/recall-tasks${toQuery(params)}`);
-    return adaptList<RecallTask>(payload, ['tasks', 'recallTasks', 'items']);
+
+  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
+    return adaptList<CommunityReport>(payload, ['reports', 'items']);
   }
 
-  async createRecallTask(data: RecallTaskPayload) {
-    const payload = await this.post<ApiEnvelope<RecallTask>>('/admin/marketing/recall-tasks', data);
-    return unwrapData<RecallTask>(payload);
+  async getOrders(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/orders${toQuery(params)}`);
+    return adaptList<AdminOrder>(payload, ['orders', 'items']);
   }
 
-  async updateRecallTask(id: RecallTask['id'], data: RecallTaskPayload) {
-    const payload = await this.put<ApiEnvelope<RecallTask>>(`/admin/marketing/recall-tasks/${id}`, data);
-    return unwrapData<RecallTask>(payload);
-  }
-
-  async executeRecallTask(id: RecallTask['id']) {
-    const payload = await this.post<ApiEnvelope<RecallTask>>(`/admin/marketing/recall-tasks/${id}/execute`);
-    return unwrapData<RecallTask>(payload);
+  async getAiStats(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<AiStats>>(`/admin/ai-stats${toQuery(params)}`);
+    return unwrapData<AiStats>(payload);
   }
 }
 
