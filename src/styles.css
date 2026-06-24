@@ -3608,3 +3608,92 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+.table-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 24px 0 16px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 920px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: #475569;
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #475569;
+  background: #e2e8f0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-pill.success {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-pill.muted {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.inline-actions select {
+  min-width: 128px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #334155;
+  background: #fff;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  color: #fff;
+  background: #dc2626;
+}
+
+.empty-cell {
+  color: #64748b;
+  text-align: center !important;
+}

@@ -43,6 +43,8 @@ function renderModulePage(module: AdminModule) {
 
 }
 import { OperationLogs } from '../pages/OperationLogs';
+import { ModerationPage } from '../pages/ModerationPage';
+import { UsersPage } from '../pages/UsersPage';
 import { adminModules } from './modules';
 
 export const router = createBrowserRouter([
@@ -286,4 +288,19 @@ export const router = createBrowserRouter([
       })),
     ],
   },
+  {
+      path: '/',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <Navigate to="/dashboard" replace /> },
+        ...adminModules.map((module) => ({
+          path: module.path.slice(1),
+          element: module.path === '/users'
+            ? <UsersPage />
+            : module.path === '/moderation'
+              ? <ModerationPage />
+              : <ModulePage title={module.label} description={module.description} />,
+        })),
+      ],
+    },
 ]);
