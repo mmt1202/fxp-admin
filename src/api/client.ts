@@ -18,6 +18,26 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type RefundStatus = 'pending' | 'approved' | 'rejected' | 'processing' | 'succeeded' | 'failed';
+
+export type RefundOrder = {
+  id: string;
+  originalOrderId: string;
+  userId: string;
+  refundAmount: number;
+  refundReason: string;
+  status: RefundStatus;
+  auditor?: string;
+  auditTime?: string;
+  thirdPartyRefundNo?: string;
+  paymentChannel?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type CreateRefundPayload = Pick<RefundOrder, 'originalOrderId' | 'userId' | 'refundAmount' | 'refundReason'>;
+export type AuditRefundPayload = { approved: boolean; auditReason?: string };
+export type ExecuteRefundPayload = { channel: string };
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +184,26 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getRefunds(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/finance/refunds${toQuery(params)}`);
+    return adaptList<RefundOrder>(payload, ['refunds', 'items']);
+  }
+
+  async createRefund(data: CreateRefundPayload) {
+    const payload = await this.post<ApiEnvelope<RefundOrder>>('/admin/finance/refunds', data);
+    return unwrapData<RefundOrder>(payload);
+  }
+
+  async auditRefund(id: string, data: AuditRefundPayload) {
+    const payload = await this.put<ApiEnvelope<RefundOrder>>(`/admin/finance/refunds/${id}/audit`, data);
+    return unwrapData<RefundOrder>(payload);
+  }
+
+  async executeRefund(id: string, data: ExecuteRefundPayload) {
+    const payload = await this.post<ApiEnvelope<RefundOrder>>(`/admin/finance/refunds/${id}/execute`, data);
+    return unwrapData<RefundOrder>(payload);
   }
 }
 

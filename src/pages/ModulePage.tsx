@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../api/client';
 import type { AdminModule } from '../routes/modules';
 
+type GenericModule = Exclude<AdminModule['module'], 'config' | 'refunds'>;
+
 type ModulePageProps = {
   title: string;
   description: string;
-  module: AdminModule['module'];
+  module: GenericModule;
 };
 
 type LoadState = {
@@ -14,7 +16,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<GenericModule, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -27,6 +29,9 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
   orders: () => apiClient.getOrders(),
   'ai-stats': () => apiClient.getAiStats(),
   'community-reports': () => apiClient.getCommunityReports(),
+  properties: async () => ({ message: '房源管理接口待后端提供。' }),
+  reviews: async () => ({ message: '评价管理接口待后端提供。' }),
+  moderation: async () => ({ message: '举报/审核接口待后端提供。' }),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,7 +41,12 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
+    queueMicrotask(() => {
+      if (!ignore) {
+        setState({ loading: true });
+      }
+    });
+
     loader()
       .then((data) => {
         if (!ignore) {

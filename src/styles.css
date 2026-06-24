@@ -290,6 +290,8 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +312,133 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+.refund-page {
+  display: grid;
+  gap: 22px;
+}
+
+.refund-create-card,
+.refund-list-card {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.refund-create-card h2,
+.refund-list-card h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.refund-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.refund-toolbar label {
+  display: grid;
+  gap: 6px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.refund-toolbar select {
+  min-width: 148px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.refund-table-wrap {
+  overflow-x: auto;
+}
+
+.refund-table {
+  width: 100%;
+  min-width: 1060px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.refund-table th,
+.refund-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.refund-table th {
+  color: #334155;
+  background: #eff6ff;
+  font-size: 13px;
+}
+
+.refund-table td {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.refund-table small {
+  color: #64748b;
+}
+
+.refund-status {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #1e40af;
+  background: #dbeafe;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.refund-status.approved,
+.refund-status.succeeded {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.refund-status.rejected,
+.refund-status.failed {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.refund-status.processing {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-actions button {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+.empty-table {
+  text-align: center !important;
+  color: #64748b !important;
 }
