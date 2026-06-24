@@ -3,6 +3,7 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
 import { AdminUsers } from '../pages/AdminUsers';
 import { AnalyticsPage, DashboardPage } from '../pages/AnalyticsPages';
+import { CityConfig } from '../pages/CityConfig';
 import { CmsArticles } from '../pages/CmsArticles';
 import { ContentModeration } from '../pages/ContentModeration';
 import { ContentQuality } from '../pages/ContentQuality';
@@ -51,6 +52,7 @@ function moduleElement(module: AdminModule) {
     case '/cms': return <CmsArticles />;
     case '/operation-logs': return <OperationLogs />;
     case '/regional-heat': return <RegionalHeatPage />;
+    case '/geo/cities': return <CityConfig />;
     case '/system-health': return <SystemHealth />;
     case '/config':
     case '/settings': return <SystemConfig />;
