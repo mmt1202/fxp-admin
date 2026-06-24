@@ -12,7 +12,7 @@ export type AdminModuleKey =
   | 'content-moderation' | 'content-quality' | 'recommendation-pools' | 'memberships' | 'orders'
   | 'ai-stats' | 'reports' | 'settings' | 'operation-logs' | 'user-lifecycle' | 'recall-tasks'
   | 'cms' | 'membership-plans' | 'regional-heat' | 'system-health' | 'risk' | 'admin-users'
-  | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments';
+  | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config';
 
 export type AdminModule = {
   path: string;
@@ -55,6 +55,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/cms', label: '内容 CMS', icon: '📝', module: 'cms', description: '管理官方文章、Markdown 内容、预览以及发布状态。' }),
   module({ path: '/operation-logs', label: '操作日志', icon: '🧾', module: 'operation-logs', description: '按管理员、操作类型、目标对象与时间范围追踪后台操作。' }),
   module({ path: '/regional-heat', label: '区域热度', icon: '🔥', module: 'regional-heat', description: '按城市、区域与小区分析房源、评价、AI 评房和用户互动热度。' }),
+  module({ path: '/geo/cities', label: '城市配置', icon: '🌆', module: 'city-config', description: '配置城市服务开通状态、热门城市、默认经纬度与运营说明。', endpoints: [{ method: 'GET', path: '/admin/geo/cities', description: '获取城市配置列表。' }, { method: 'POST', path: '/admin/geo/cities', description: '新增城市配置。' }, { method: 'PUT', path: '/admin/geo/cities/:id', description: '更新城市配置。' }, { method: 'PUT', path: '/admin/geo/cities/:id/status', description: '更新城市服务开通状态。' }] }),
   module({ path: '/system-health', label: '系统监控', icon: '🟢', module: 'system-health', description: '查看 API、数据库、Redis、队列、AI、支付回调与推送服务健康状态。' }),
   module({ path: '/config', label: '配置中心', icon: '⚙️', module: 'config', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
   module({ path: '/settings', label: '系统配置', icon: '⚙️', module: 'settings', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
