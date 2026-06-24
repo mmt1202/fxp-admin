@@ -1,7 +1,10 @@
 export type RouteKey = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings';
 
+export type AppRoute = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings';
+
 export type MenuItem = {
   key: RouteKey;
+  route: AppRoute;
   path: string;
   label: string;
   icon: string;
@@ -23,4 +26,8 @@ export function getRouteKey(pathname: string): RouteKey | 'login' {
   }
 
   return menuItems.find((item) => item.path === pathname)?.key ?? 'dashboard';
+}
+
+export function findMenuItem(pathname: string): MenuItem {
+  return menuItems.find((item) => item.path === pathname) ?? menuItems[0];
 }
