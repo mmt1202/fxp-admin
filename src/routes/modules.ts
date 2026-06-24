@@ -83,6 +83,7 @@ export const adminModules: AdminModule[] = [
     description: '配置后台权限、业务字典、审核策略与接口参数。',
     endpoints: [],
   },
+  { path: '/operation-logs', label: '操作日志', icon: '🧾', description: '按管理员、操作类型、目标对象与时间范围追踪后台操作。' },
   { path: '/user-lifecycle', label: '用户生命周期', icon: '🔁', description: '分析注册到复购、流失的关键用户转化路径。', module: 'user-lifecycle' },
   { path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。', module: 'recall-tasks' },
   { path: '/cms', label: '内容 CMS', icon: '📝', description: '管理官方文章、Markdown 内容、预览以及发布状态。', module: 'cms' },
