@@ -89,18 +89,58 @@ export type AdminUserDetail = AdminUserListItem & {
   }>;
 };
 
+export type UserAdminNote = {
+  id: string;
+  userId: string;
+  adminId: string;
+  content: string;
+  createdAt: string;
+};
+export type UserTag = {
+  id: string;
+  name: string;
+  color?: string;
+};
+
 export function getAdminUsers() {
   return apiClient.get<AdminUserListItem[]>('/admin/users');
 }
+export type UserTagsResponse = {
+  tags: UserTag[];
+};
+
+export type UserAdminNotesResponse = {
+  notes: UserAdminNote[];
+};
 
 export function getAdminUserDetail(userId: string) {
   return apiClient.get<AdminUserDetail>(`/admin/users/${userId}`);
 }
+export type UpdateUserTagsPayload = {
+  tags: UserTag[];
+};
 
 export function updateAdminUserStatus(userId: string, accountStatus: AccountStatus) {
   return apiClient.put<AdminUserDetail>(`/admin/users/${userId}/status`, { accountStatus });
 }
+export type CreateUserAdminNotePayload = {
+  content: string;
+};
 
 export function updateAdminUserMembership(userId: string, membershipStatus: MembershipStatus) {
   return apiClient.put<AdminUserDetail>(`/admin/users/${userId}/membership`, { membershipStatus });
 }
+const encodeUserId = (userId: string) => encodeURIComponent(userId);
+
+export const userProfileApi = {
+  getTags: (userId: string) => apiClient.get<UserTagsResponse>(`/admin/users/${encodeUserId(userId)}/tags`),
+  updateTags: (userId: string, tags: UserTag[]) => apiClient.put<UserTagsResponse>(
+    `/admin/users/${encodeUserId(userId)}/tags`,
+    { tags } satisfies UpdateUserTagsPayload,
+  ),
+  getNotes: (userId: string) => apiClient.get<UserAdminNotesResponse>(`/admin/users/${encodeUserId(userId)}/notes`),
+  createNote: (userId: string, content: string) => apiClient.post<UserAdminNote>(
+    `/admin/users/${encodeUserId(userId)}/notes`,
+    { content } satisfies CreateUserAdminNotePayload,
+  ),
+};

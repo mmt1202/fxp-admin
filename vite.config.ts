@@ -211,9 +211,10 @@ function communityModerationMockApi(): Plugin {
     },
   };
 }
+import { adminUserProfileMockPlugin } from './src/mocks/adminUserProfilePlugin';
 
 export default defineConfig({
-  plugins: [react(), communityModerationMockApi()],
+  plugins: [react(), communityModerationMockApi(),adminUserProfileMockPlugin()],
   server: {
     port: 5173,
   },
