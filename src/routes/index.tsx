@@ -7,6 +7,7 @@ import { CmsArticles } from '../pages/CmsArticles';
 import { ContentModeration } from '../pages/ContentModeration';
 import { ContentQuality } from '../pages/ContentQuality';
 import { MarketingCampaigns } from '../pages/MarketingCampaigns';
+import { MarketingTools } from '../pages/MarketingTools';
 import { MembershipPlans } from '../pages/MembershipPlans';
 import { ModerationPage } from '../pages/ModerationPage';
 import { ModulePage } from '../pages/ModulePage';
@@ -21,6 +22,7 @@ import { SystemConfig } from '../pages/SystemConfig';
 import { SystemHealth } from '../pages/SystemHealth';
 import { UserDetailPage } from '../pages/UserDetailPage';
 import { UserLifecycle } from '../pages/UserLifecycle';
+import { UserMembershipsPage } from '../pages/UserMembershipsPage';
 import { UserListPage } from '../pages/UserListPage';
 import { UserSegments } from '../pages/UserSegments';
 import { PermissionRoute } from './PermissionRoute';
@@ -37,8 +39,10 @@ function moduleElement(module: AdminModule) {
     case '/content-moderation': return <ContentModeration />;
     case '/moderation':
     case '/reports': return <ModerationPage />;
+    case '/membership': return <UserMembershipsPage />;
     case '/membership/plans': return <MembershipPlans />;
     case '/marketing': return <MarketingCampaigns />;
+    case '/marketing/tools': return <MarketingTools />;
     case '/marketing/recall-tasks': return <RecallTasks />;
     case '/recommendation-pools': return <RecommendationPools />;
     case '/content-quality': return <ContentQuality />;

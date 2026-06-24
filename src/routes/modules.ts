@@ -12,7 +12,7 @@ export type AdminModuleKey =
   | 'content-moderation' | 'content-quality' | 'recommendation-pools' | 'memberships' | 'orders'
   | 'ai-stats' | 'reports' | 'settings' | 'operation-logs' | 'user-lifecycle' | 'recall-tasks'
   | 'cms' | 'membership-plans' | 'regional-heat' | 'system-health' | 'risk' | 'admin-users'
-  | 'property-governance' | 'marketing' | 'user-segments';
+  | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments';
 
 export type AdminModule = {
   path: string;
@@ -46,6 +46,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/membership', label: '会员配置', icon: '💎', module: 'memberships', description: '配置会员权益、套餐状态、增值服务与更新策略。', permission: 'membership:update' }),
   module({ path: '/membership/plans', label: '会员套餐', icon: '💎', module: 'membership-plans', description: '配置会员套餐、价格、有效期、AI 次数额度与启停状态。' }),
   module({ path: '/marketing', label: '运营活动', icon: '🎯', module: 'marketing', description: '配置拉新、促活与转化活动，跟踪奖励发放和订单转化效果。' }),
+  module({ path: '/marketing/tools', label: '营销工具', icon: '🎟️', module: 'marketing-tools', description: '管理优惠券批次、兑换码生成、领取记录和使用记录。' }),
   module({ path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', module: 'recall-tasks', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。' }),
   module({ path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', module: 'recommendation-pools', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。' }),
   module({ path: '/content-quality', label: '内容质量', icon: '🏆', module: 'content-quality', description: '查看社区笔记、评论、房源评价与 AI 报告的质量评分和复核状态。' }),
