@@ -19,6 +19,30 @@ export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
 
+export type AiReviewStatus = 'pending' | 'approved' | 'corrected' | 'rejected';
+
+export type AiReviewRecord = {
+  id: string | number;
+  auditStatus?: AiReviewStatus | string;
+  status?: AiReviewStatus | string;
+  property?: Record<string, unknown>;
+  propertyInfo?: Record<string, unknown>;
+  aiResult?: unknown;
+  aiOutput?: unknown;
+  feedback?: unknown;
+  userFeedback?: unknown;
+  riskKeywords?: string[];
+  correctionComment?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  [key: string]: unknown;
+};
+
+export type AiReviewAuditPayload = {
+  status: AiReviewStatus;
+  correctionComment?: string;
+};
+
 export type ListResult<T> = {
   items: T[];
   total?: number;
@@ -164,6 +188,21 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getAiReviewRecords(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/ai-review/records${toQuery(params)}`);
+    return adaptList<AiReviewRecord>(payload, ['records', 'items']);
+  }
+
+  async getAiReviewRecord(id: string | number) {
+    const payload = await this.get<ApiEnvelope<AiReviewRecord>>(`/admin/ai-review/records/${id}`);
+    return unwrapData<AiReviewRecord>(payload);
+  }
+
+  async auditAiReviewRecord(id: string | number, data: AiReviewAuditPayload) {
+    const payload = await this.put<ApiEnvelope<AiReviewRecord>>(`/admin/ai-review/records/${id}/audit`, data);
+    return unwrapData<AiReviewRecord>(payload);
   }
 }
 
