@@ -17,7 +17,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -290,6 +292,9 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +315,149 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+
+.field-label select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.ai-prompt-page {
+  display: grid;
+  gap: 22px;
+}
+
+.prompt-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(480px, 1.4fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.prompt-editor {
+  position: sticky;
+  top: 24px;
+}
+
+.prompt-table-wrap {
+  overflow: auto;
+}
+
+.prompt-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.prompt-table th,
+.prompt-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prompt-table th {
+  color: #475569;
+  background: #f1f5f9;
+  font-size: 13px;
+}
+
+.prompt-table small {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+.prompt-status {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #334155;
+  background: #e2e8f0;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.prompt-status.published {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.prompt-status.draft {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.prompt-status.archived {
+  color: #475569;
+  background: #e2e8f0;
+}
+
+.diff-section {
+  overflow: hidden;
+}
+
+.diff-grid {
+  display: grid;
+  max-height: 520px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.diff-row {
+  display: grid;
+  grid-template-columns: 56px minmax(240px, 1fr) minmax(240px, 1fr);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.diff-row.changed {
+  background: #fff7ed;
+}
+
+.diff-row span,
+.diff-row pre {
+  margin: 0;
+  padding: 10px 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+}
+
+.diff-row span {
+  color: #64748b;
+  background: #f8fafc;
+}
+
+@media (max-width: 1100px) {
+  .prompt-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-editor {
+    position: static;
+  }
 }

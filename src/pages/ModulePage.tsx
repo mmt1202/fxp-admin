@@ -24,9 +24,11 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => Promise.resolve({ message: '房源管理接口待后端接入', items: [] }),
+  reviews: () => Promise.resolve({ message: '评价管理接口待后端接入', items: [] }),
+  moderation: () => Promise.resolve({ message: '举报/审核接口待后端接入', items: [] }),
+  config: () => Promise.resolve({}),
+  'ai-prompts': () => Promise.resolve({}),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,8 +38,13 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
-    loader()
+    Promise.resolve()
+      .then(() => {
+        if (!ignore) {
+          setState({ loading: true });
+        }
+      })
+      .then(() => loader())
       .then((data) => {
         if (!ignore) {
           setState({ loading: false, data });
