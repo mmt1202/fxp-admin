@@ -49,6 +49,7 @@ import { UsersPage } from '../pages/UsersPage';
 import { Properties } from '../pages/Properties';
 import { PropertyManagement } from '../pages/PropertyManagement';
 import { UserDetail } from '../pages/UserDetail';
+import { Properties } from '../pages/Properties';
 import { adminModules } from './modules';
 
 export const router = createBrowserRouter([
@@ -66,6 +67,19 @@ export const router = createBrowserRouter([
         })),
       ],
     },
+{
+    path: '/',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      ...adminModules.map((module) => ({
+        path: module.path.slice(1),
+        element: module.path === '/properties'
+          ? <Properties />
+          : <ModulePage title={module.label} description={module.description} />,
+      })),
+    ],
+  },
   {
       path: '/',
       element: <AdminLayout />,
