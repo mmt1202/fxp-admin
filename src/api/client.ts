@@ -18,6 +18,37 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type CommunityBase = Record<string, unknown> & {
+  id?: string | number;
+  _id?: string | number;
+  name?: string;
+  city?: string;
+  district?: string;
+  street?: string;
+  longitude?: number;
+  latitude?: number;
+  builtYear?: number;
+  propertyCompany?: string;
+  developer?: string;
+  tags?: string[] | string;
+  riskTips?: string;
+  propertyCount?: number;
+  reviewCount?: number;
+};
+
+export type CommunityBasePayload = {
+  name: string;
+  city?: string;
+  district?: string;
+  street?: string;
+  longitude?: number;
+  latitude?: number;
+  builtYear?: number;
+  propertyCompany?: string;
+  developer?: string;
+  tags?: string[];
+  riskTips?: string;
+};
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +195,30 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getCommunities(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/communities${toQuery(params)}`);
+    return adaptList<CommunityBase>(payload, ['communities', 'items']);
+  }
+
+  async createCommunity(data: CommunityBasePayload) {
+    const payload = await this.post<ApiEnvelope<CommunityBase>>('/admin/communities', data);
+    return unwrapData<CommunityBase>(payload);
+  }
+
+  async updateCommunity(id: string | number, data: CommunityBasePayload) {
+    const payload = await this.put<ApiEnvelope<CommunityBase>>(`/admin/communities/${id}`, data);
+    return unwrapData<CommunityBase>(payload);
+  }
+
+  async deleteCommunity(id: string | number) {
+    return this.delete<ApiEnvelope<{ success?: boolean }>>(`/admin/communities/${id}`);
+  }
+
+  async mergeCommunities(sourceId: string | number, targetId: string | number) {
+    const payload = await this.post<ApiEnvelope<CommunityBase>>('/admin/communities/merge', { sourceId, targetId });
+    return unwrapData<CommunityBase>(payload);
   }
 }
 

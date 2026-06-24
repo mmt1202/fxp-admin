@@ -24,9 +24,11 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => apiClient.getOrders(),
+  communities: () => apiClient.getCommunities(),
+  reviews: () => apiClient.getCommunityReports(),
+  moderation: () => apiClient.getCommunityReports(),
+  config: async () => ({}),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,8 +38,13 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
-    loader()
+    Promise.resolve()
+      .then(() => {
+        if (!ignore) {
+          setState({ loading: true });
+        }
+      })
+      .then(loader)
       .then((data) => {
         if (!ignore) {
           setState({ loading: false, data });
