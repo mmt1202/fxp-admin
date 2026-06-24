@@ -1,2 +1,2 @@
 export * from './client';
-export * from './modules';
+export * as adminApiModules from './modules';

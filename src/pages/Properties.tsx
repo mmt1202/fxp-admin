@@ -59,7 +59,7 @@ export function Properties() {
         const result = await getAdminProperties({ ...appliedFilters, page, pageSize });
         if (!ignore) {
           setProperties(result.items);
-          setTotal(result.total);
+          setTotal(result.total ?? result.items.length);
         }
       } catch {
         if (!ignore) {
