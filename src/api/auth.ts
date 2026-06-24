@@ -1,9 +1,15 @@
 import { apiClient } from './client';
 
-type LoginResponse = {
+export type LoginResponse = {
   token: string;
 };
 
-export function loginApi(username: string, password: string) {
-  return apiClient.post<LoginResponse>('/admin/auth/login', { username, password }, { skipAuth: true });
+export async function loginApi(username: string, password: string) {
+  const response = await apiClient.post<LoginResponse>('/admin/auth/login', { username, password }, { skipAuth: true });
+
+  if (!response.token) {
+    throw new Error('Login response did not include a token.');
+  }
+
+  return response;
 }
