@@ -9,6 +9,8 @@ import { RecommendationPools } from '../pages/RecommendationPools';
 import { CmsArticles } from '../pages/CmsArticles';
 import { RecallTasks } from '../pages/RecallTasks';
 import { RecallTasks } from '../pages/RecallTasks';
+import { PropertyGovernance } from '../pages/PropertyGovernance';
+import { PropertyManagement } from '../pages/PropertyManagement';
 import { SystemConfig } from '../pages/SystemConfig';
 import { RiskConfig } from '../pages/RiskConfig';
 import { UserDetailPage } from '../pages/UserDetailPage';
@@ -21,16 +23,24 @@ import { adminModules, type AdminModule } from './modules';
 import { ContentQuality } from '../pages/ContentQuality';
 
 function renderModulePage(module: AdminModule) {
+      if (module.path === '/properties') {
+        return <PropertyManagement />;
+      }
+
+      if (module.path === '/property-governance') {
+        return <PropertyGovernance />;
+      }
   switch (module.module) {
     case 'config':
       return <SystemConfig />;
     case 'marketing':
       return <MarketingCampaigns />;
     case 'content-quality' :
-        <ContentQuality />
+       return <ContentQuality />
     default:
       return <ModulePage title={module.label} description={module.description} module={module.module} />;
   }
+
 }
 
 export const router = createBrowserRouter([
@@ -46,6 +56,17 @@ export const router = createBrowserRouter([
         })),
       ],
     },
+    {
+    path: '/',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      ...adminModules.map((module) => ({
+        path: module.path.slice(1),
+        element: getModuleElement(module),
+      })),
+    ],
+  },
   {
     path: '/',
     element: <AdminLayout />,

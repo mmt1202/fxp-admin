@@ -8,6 +8,8 @@ import type { AdminPermission } from '../types/admin';
 
 type LoadableModule = Exclude<AdminModule['module'], 'config' | 'recommendation-pools'>;
 
+type LoadableModule = NonNullable<AdminModule['module']>;
+
 type ModulePageProps = {
   title: string;
   description: string;
@@ -53,7 +55,7 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
           }
         });
     loader()
-      .then((data) => {
+      .then((data: unknown) => {
         if (!ignore) {
           setState({ loading: false, data });
         }
