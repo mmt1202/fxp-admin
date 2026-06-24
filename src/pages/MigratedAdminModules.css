@@ -1,0 +1,301 @@
+.filter-bar,
+.reconciliation-toolbar,
+.feedback-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+  margin: 20px 0;
+}
+
+.filter-bar label,
+.reconciliation-toolbar label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.filter-bar input,
+.filter-bar select,
+.reconciliation-toolbar input,
+.reconciliation-toolbar select,
+.feedback-filters input,
+.feedback-filters select,
+.ticket-actions select,
+.refund-toolbar select,
+.reply-box textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.table-section,
+.security-section,
+.refund-list-card,
+.ticket-detail-panel,
+.ticket-list-panel,
+.feedback-list-panel,
+.feedback-detail-panel,
+.duplicate-detail,
+.duplicate-groups,
+.community-list-card,
+.watchlist-table-card,
+.timeline-card {
+  margin-top: 20px;
+}
+
+.table-scroll,
+.table-wrap,
+.refund-table-wrap,
+.prompt-table-wrap,
+.compare-table-wrap {
+  overflow-x: auto;
+}
+
+.section-title,
+.section-heading,
+.section-title-row,
+.refund-toolbar,
+.ticket-detail-header,
+.ticket-list-header,
+.feedback-detail-header,
+.duplicate-groups-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.metric-grid,
+.summary-grid,
+.duplicate-summary,
+.security-rule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.metric-grid article,
+.metric-grid div,
+.summary-grid div,
+.duplicate-summary div,
+.security-rule-grid div {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #eff6ff;
+}
+
+.metric-grid strong,
+.summary-grid strong,
+.duplicate-summary strong {
+  color: #1d4ed8;
+  font-size: 26px;
+}
+
+.review-layout,
+.prompt-layout,
+.watchlist-layout,
+.community-layout,
+.ticket-workspace,
+.feedback-layout,
+.duplicates-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(420px, 1.5fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.review-list,
+.ticket-list-panel,
+.feedback-list-panel,
+.duplicate-groups {
+  display: grid;
+  gap: 10px;
+}
+
+.record-card,
+.ticket-list-item,
+.feedback-list-item,
+.duplicate-group-card {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  color: #0f172a;
+  background: #fff;
+  text-align: left;
+}
+
+.record-card.active,
+.ticket-list-item.active,
+.feedback-list-item.active,
+.duplicate-group-card.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+}
+
+.detail-grid,
+.property-card-grid,
+.diff-grid,
+.message-list,
+.timeline {
+  display: grid;
+  gap: 14px;
+}
+
+.detail-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.detail-grid pre,
+.diff-row pre,
+.api-panel {
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  color: #0f172a;
+  background: #f8fafc;
+  white-space: pre-wrap;
+}
+
+.api-panel.error {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.status-message.saved,
+.status-message.idle {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.status-message.error {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.table-actions,
+.audit-actions,
+.duplicate-actions,
+.feedback-actions,
+.ticket-actions,
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.result-badge,
+.prompt-status,
+.feedback-status,
+.refund-status,
+.ticket-status,
+.risk-badge,
+.risk-level,
+.success-pill,
+.fail-pill,
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.success,
+.succeeded,
+.approved,
+.resolved,
+.published,
+.success-pill {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.failed,
+.rejected,
+.closed,
+.fail-pill,
+.danger {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.pending,
+.processing,
+.in_progress,
+.corrected,
+.waiting_user,
+.draft {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.property-duplicate-card,
+.message-bubble,
+.timeline-item {
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.property-duplicate-card img,
+.feedback-images img {
+  max-width: 160px;
+  border-radius: 12px;
+}
+
+.diff-row {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.diff-row.changed pre {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.tag {
+  display: inline-flex;
+  margin: 2px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 980px) {
+  .review-layout,
+  .prompt-layout,
+  .watchlist-layout,
+  .community-layout,
+  .ticket-workspace,
+  .feedback-layout,
+  .duplicates-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .diff-row {
+    grid-template-columns: 1fr;
+  }
+}
