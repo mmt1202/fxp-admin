@@ -2,6 +2,8 @@ import { authState } from '../state/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
+
+
 type RequestOptions = RequestInit & {
   skipAuth?: boolean;
 };
