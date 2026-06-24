@@ -3,6 +3,7 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
 import { ModulePage } from '../pages/ModulePage';
 import { SystemConfig } from '../pages/SystemConfig';
+import { UserFeedback } from '../pages/UserFeedback';
 import { adminModules } from './modules';
 
 export const router = createBrowserRouter([
@@ -14,10 +15,11 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/dashboard" replace /> },
       ...adminModules.map((module) => ({
         path: module.path.slice(1),
-        element: module.path === '/config'
+        element: module.module === 'config'
           ? <SystemConfig />
-          : <ModulePage title={module.label} description={module.description} />,
-        element: <ModulePage title={module.label} description={module.description} module={module.module} />,
+          : module.module === 'feedback'
+            ? <UserFeedback />
+            : <ModulePage title={module.label} description={module.description} module={module.module} />,
       })),
     ],
   },
