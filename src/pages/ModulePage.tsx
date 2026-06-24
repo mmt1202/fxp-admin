@@ -13,6 +13,7 @@ type ModulePageProps = {
   description: string;
   module: AdminModule['module'];
   permission: AdminPermission;
+  module: Exclude<AdminModule['module'], 'config' | 'user-lifecycle'>;
 };
 
 type LoadState = {
@@ -21,8 +22,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<LoadableModule, () => Promise<unknown>> = {
-const moduleLoaders: Record<Exclude<AdminModule['module'], 'config' | 'cms'>, () => Promise<unknown>> = {
+const moduleLoaders: Record<Exclude<AdminModule['module'], 'config' | 'user-lifecycle'>, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),

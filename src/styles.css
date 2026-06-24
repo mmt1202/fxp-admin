@@ -558,6 +558,196 @@ td {
   background: #fef2f2;
 }
 
+.lifecycle-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.date-filter-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.date-filter-card label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.date-filter-card input {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.quick-range-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.secondary-button {
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.lifecycle-funnel {
+  display: grid;
+  gap: 14px;
+}
+
+.lifecycle-stage-card {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 150px;
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 18px;
+  color: inherit;
+  background: linear-gradient(135deg, #fff, #f8fbff);
+  text-align: left;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 6%);
+}
+
+.lifecycle-stage-card:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.stage-index {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-weight: 800;
+}
+
+.stage-content,
+.stage-metrics {
+  display: grid;
+  gap: 6px;
+}
+
+.stage-content small,
+.stage-metrics small,
+.user-drawer header p {
+  color: #64748b;
+}
+
+.funnel-bar {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.funnel-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.stage-metrics {
+  justify-items: end;
+}
+
+.stage-metrics strong {
+  color: #0f172a;
+  font-size: 26px;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  background: rgb(15 23 42 / 42%);
+}
+
+.user-drawer {
+  width: min(620px, 100vw);
+  height: 100%;
+  overflow: auto;
+  padding: 26px;
+  background: #fff;
+  box-shadow: -18px 0 42px rgb(15 23 42 / 18%);
+}
+
+.user-drawer header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.user-drawer h2 {
+  margin: 0 0 6px;
+}
+
+.user-list-table {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.user-list-head,
+.user-list-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.user-list-head {
+  color: #334155;
+  background: #f8fafc;
+  font-weight: 800;
+}
+
+.user-list-row + .user-list-row {
+  border-top: 1px solid #e2e8f0;
+}
+
+.empty-row {
+  padding: 24px;
+  color: #64748b;
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .lifecycle-heading,
+  .date-filter-card {
+    display: grid;
+  }
+
+  .lifecycle-stage-card {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-metrics {
+    justify-items: start;
+  }
+}
+
 .status-message.saved {
   color: #047857;
   background: #d1fae5;

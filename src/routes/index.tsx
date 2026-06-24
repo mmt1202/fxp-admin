@@ -14,6 +14,7 @@ import { UserDetailPage } from '../pages/UserDetailPage';
 import { UserListPage } from '../pages/UserListPage';
 import { MembershipPlans } from '../pages/MembershipPlans';
 import { SystemHealth } from '../pages/SystemHealth';
+import { UserLifecycle } from '../pages/UserLifecycle';
 import { adminModules } from './modules';
 import { PermissionRoute } from './PermissionRoute';
 import { adminModules, type AdminModule } from './modules';
@@ -205,4 +206,19 @@ export const router = createBrowserRouter([
         })),
       ],
     },
+{
+    path: '/',
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      ...adminModules.map((module) => ({
+        path: module.path.slice(1),
+        element: module.module === 'config'
+          ? <SystemConfig />
+          : module.module === 'user-lifecycle'
+            ? <UserLifecycle />
+            : <ModulePage title={module.label} description={module.description} module={module.module} />,
+      })),
+    ],
+  },
 ]);
