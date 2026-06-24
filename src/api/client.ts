@@ -19,6 +19,41 @@ export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
 
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+
+export type RiskWatchlist = {
+  id: string | number;
+  userId: string | number;
+  riskType: string;
+  riskLevel: RiskLevel | string;
+  reason: string;
+  addedBy: string;
+  expiresAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  events?: RiskEvent[];
+};
+
+export type RiskEvent = {
+  id: string | number;
+  watchlistId?: string | number;
+  userId: string | number;
+  action: 'post' | 'comment' | 'ai_call' | 'report' | string;
+  summary: string;
+  detail?: string;
+  riskLevel?: RiskLevel | string;
+  createdAt?: string;
+};
+
+export type RiskWatchlistPayload = {
+  userId: string | number;
+  riskType: string;
+  riskLevel: RiskLevel | string;
+  reason: string;
+  addedBy: string;
+  expiresAt?: string | null;
+};
+
 export type ListResult<T> = {
   items: T[];
   total?: number;
@@ -164,6 +199,30 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getRiskWatchlist(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/security/watchlist${toQuery(params)}`);
+    return adaptList<RiskWatchlist>(payload, ['items', 'watchlist', 'records']);
+  }
+
+  async createRiskWatchlist(payload: RiskWatchlistPayload) {
+    const response = await this.post<ApiEnvelope<RiskWatchlist>>('/admin/security/watchlist', payload);
+    return unwrapData<RiskWatchlist>(response);
+  }
+
+  async updateRiskWatchlist(id: string | number, payload: Partial<RiskWatchlistPayload>) {
+    const response = await this.put<ApiEnvelope<RiskWatchlist>>(`/admin/security/watchlist/${id}`, payload);
+    return unwrapData<RiskWatchlist>(response);
+  }
+
+  async deleteRiskWatchlist(id: string | number) {
+    return this.delete<ApiEnvelope<{ success?: boolean }>>(`/admin/security/watchlist/${id}`);
+  }
+
+  async getRiskWatchlistEvents(id: string | number) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/security/watchlist/${id}/events`);
+    return adaptList<RiskEvent>(payload, ['events', 'items', 'timeline']);
   }
 }
 
