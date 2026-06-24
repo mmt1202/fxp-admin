@@ -290,6 +290,8 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +312,170 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+.duplicates-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.duplicate-groups,
+.duplicate-detail {
+  display: grid;
+  gap: 14px;
+}
+
+.duplicate-groups {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.duplicate-groups-header,
+.duplicate-summary,
+.duplicate-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.duplicate-groups-header span,
+.empty-text {
+  color: #64748b;
+}
+
+.duplicate-group-card {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  justify-items: start;
+  border: 1px solid #dbeafe;
+  padding: 14px;
+  color: #334155;
+  background: #fff;
+  text-align: left;
+}
+
+.duplicate-group-card small {
+  color: #64748b;
+}
+
+.duplicate-group-card.active {
+  border-color: #2563eb;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.duplicate-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.duplicate-summary div {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #f1f5f9;
+}
+
+.duplicate-summary span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.property-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.property-duplicate-card {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.property-duplicate-card img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.property-duplicate-card div {
+  padding: 16px;
+}
+
+.property-duplicate-card h3 {
+  margin: 10px 0 8px;
+  color: #0f172a;
+}
+
+.property-duplicate-card p {
+  margin: 0;
+  color: #64748b;
+}
+
+.radio-label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: fit-content;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.compare-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.compare-table th {
+  color: #334155;
+  background: #f8fafc;
+}
+
+.compare-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.duplicate-actions {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+@media (max-width: 960px) {
+  .duplicates-layout {
+    grid-template-columns: 1fr;
+  }
 }

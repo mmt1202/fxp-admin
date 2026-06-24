@@ -15,9 +15,42 @@ type ApiEnvelope<T> = T | {
 export type DashboardStats = Record<string, unknown>;
 export type DashboardTrendPoint = Record<string, unknown>;
 export type AdminUser = Record<string, unknown>;
-export type AdminOrder = Record<string, unknown>;
-export type AiStats = Record<string, unknown>;
-export type CommunityReport = Record<string, unknown>;
+export type AdminProperty = Record<string, unknown>;
+export type AdminReview = Record<string, unknown>;
+export type ModerationReport = Record<string, unknown>;
+
+export type DuplicateProperty = Record<string, unknown> & {
+  id?: string | number;
+  title?: string;
+  address?: string;
+  communityName?: string;
+  building?: string;
+  roomNumber?: string;
+  area?: string | number;
+  layout?: string;
+  imageUrl?: string;
+};
+
+export type DuplicateGroup = {
+  id: string | number;
+  groupId?: string | number;
+  status?: string;
+  confidence?: number;
+  imageSimilarity?: number;
+  matchFields?: string[];
+  differences?: Record<string, unknown>;
+  properties?: DuplicateProperty[];
+  candidates?: DuplicateProperty[];
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type DuplicateMergePayload = {
+  action: 'merge' | 'ignore' | 'mark_not_duplicate' | 'confirm';
+  primaryPropertyId?: string | number;
+  propertyIds?: Array<string | number>;
+  note?: string;
+};
 
 export type ListResult<T> = {
   items: T[];
@@ -151,19 +184,34 @@ export class ApiClient {
     return adaptList<AdminUser>(payload, ['users']);
   }
 
-  async getOrders(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/orders${toQuery(params)}`);
-    return adaptList<AdminOrder>(payload, ['orders']);
+  async getProperties(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/properties${toQuery(params)}`);
+    return adaptList<AdminProperty>(payload, ['properties', 'items']);
   }
 
-  async getAiStats(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<AiStats>>(`/admin/ai-stats${toQuery(params)}`);
-    return unwrapData<AiStats>(payload);
+  async getReviews(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/reviews${toQuery(params)}`);
+    return adaptList<AdminReview>(payload, ['reviews', 'items']);
   }
 
-  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
-    return adaptList<CommunityReport>(payload, ['reports']);
+  async getModerationReports(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/moderation/reports${toQuery(params)}`);
+    return adaptList<ModerationReport>(payload, ['reports', 'items']);
+  }
+
+  async getPropertyDuplicateGroups(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/properties/duplicates${toQuery(params)}`);
+    return adaptList<DuplicateGroup>(payload, ['groups', 'duplicates', 'items']);
+  }
+
+  async getPropertyDuplicateGroup(groupId: string | number) {
+    const payload = await this.get<ApiEnvelope<DuplicateGroup>>(`/admin/properties/duplicates/${groupId}`);
+    return unwrapData<DuplicateGroup>(payload);
+  }
+
+  async mergePropertyDuplicateGroup(groupId: string | number, data: DuplicateMergePayload) {
+    const payload = await this.post<ApiEnvelope<DuplicateGroup>>(`/admin/properties/duplicates/${groupId}/merge`, data);
+    return unwrapData<DuplicateGroup>(payload);
   }
 }
 

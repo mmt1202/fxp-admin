@@ -24,9 +24,11 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => apiClient.getProperties(),
+  reviews: () => apiClient.getReviews(),
+  moderation: () => apiClient.getModerationReports(),
+  config: async () => ({}),
+  'property-duplicates': async () => ({}),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,7 +38,6 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
     loader()
       .then((data) => {
         if (!ignore) {
