@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
 import { ModulePage } from '../pages/ModulePage';
+import { SupportTickets } from '../pages/SupportTickets';
 import { SystemConfig } from '../pages/SystemConfig';
 import { adminModules } from './modules';
 
@@ -16,8 +17,9 @@ export const router = createBrowserRouter([
         path: module.path.slice(1),
         element: module.path === '/config'
           ? <SystemConfig />
-          : <ModulePage title={module.label} description={module.description} />,
-        element: <ModulePage title={module.label} description={module.description} module={module.module} />,
+          : module.path === '/support/tickets'
+            ? <SupportTickets />
+            : <ModulePage title={module.label} description={module.description} module={module.module} />,
       })),
     ],
   },

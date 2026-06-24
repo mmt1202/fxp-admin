@@ -19,6 +19,37 @@ export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
 
+export type SupportTicketStatus = 'pending' | 'in_progress' | 'waiting_user' | 'resolved' | 'closed';
+
+export type SupportTicket = {
+  id: string | number;
+  subject?: string;
+  title?: string;
+  status?: SupportTicketStatus | string;
+  priority?: string;
+  assigneeId?: string | number | null;
+  assigneeName?: string | null;
+  userId?: string | number;
+  userName?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  lastMessageAt?: string;
+};
+
+export type SupportTicketMessage = {
+  id: string | number;
+  ticketId?: string | number;
+  senderType?: 'user' | 'agent' | 'system';
+  senderName?: string;
+  content?: string;
+  isInternal?: boolean;
+  createdAt?: string;
+};
+
+export type SupportTicketDetail = SupportTicket & {
+  messages?: SupportTicketMessage[];
+};
+
 export type ListResult<T> = {
   items: T[];
   total?: number;
@@ -164,6 +195,31 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getSupportTickets(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/support/tickets${toQuery(params)}`);
+    return adaptList<SupportTicket>(payload, ['tickets']);
+  }
+
+  async getSupportTicket(id: string | number) {
+    const payload = await this.get<ApiEnvelope<SupportTicketDetail>>(`/admin/support/tickets/${id}`);
+    return unwrapData<SupportTicketDetail>(payload);
+  }
+
+  async createSupportTicketMessage(id: string | number, data: { content: string; isInternal?: boolean }) {
+    const payload = await this.post<ApiEnvelope<SupportTicketMessage>>(`/admin/support/tickets/${id}/messages`, data);
+    return unwrapData<SupportTicketMessage>(payload);
+  }
+
+  async updateSupportTicketStatus(id: string | number, status: SupportTicketStatus) {
+    const payload = await this.put<ApiEnvelope<SupportTicket>>(`/admin/support/tickets/${id}/status`, { status });
+    return unwrapData<SupportTicket>(payload);
+  }
+
+  async updateSupportTicketAssignee(id: string | number, assigneeId: string) {
+    const payload = await this.put<ApiEnvelope<SupportTicket>>(`/admin/support/tickets/${id}/assignee`, { assigneeId });
+    return unwrapData<SupportTicket>(payload);
   }
 }
 
