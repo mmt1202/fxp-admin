@@ -15,9 +15,12 @@ type ApiEnvelope<T> = T | {
 export type DashboardStats = Record<string, unknown>;
 export type DashboardTrendPoint = Record<string, unknown>;
 export type AdminUser = Record<string, unknown>;
-export type AdminOrder = Record<string, unknown>;
-export type AiStats = Record<string, unknown>;
-export type CommunityReport = Record<string, unknown>;
+export type AdminProperty = Record<string, unknown>;
+export type AdminReview = Record<string, unknown>;
+export type ModerationItem = Record<string, unknown>;
+export type AiCostOverview = Record<string, unknown>;
+export type AiCostRecord = Record<string, unknown>;
+export type AiCostByUser = Record<string, unknown>;
 
 export type ListResult<T> = {
   items: T[];
@@ -151,19 +154,34 @@ export class ApiClient {
     return adaptList<AdminUser>(payload, ['users']);
   }
 
-  async getOrders(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/orders${toQuery(params)}`);
-    return adaptList<AdminOrder>(payload, ['orders']);
+  async getProperties(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/properties${toQuery(params)}`);
+    return adaptList<AdminProperty>(payload, ['properties']);
   }
 
-  async getAiStats(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<AiStats>>(`/admin/ai-stats${toQuery(params)}`);
-    return unwrapData<AiStats>(payload);
+  async getReviews(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/reviews${toQuery(params)}`);
+    return adaptList<AdminReview>(payload, ['reviews']);
   }
 
-  async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
-    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
-    return adaptList<CommunityReport>(payload, ['reports']);
+  async getModerationItems(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/moderation${toQuery(params)}`);
+    return adaptList<ModerationItem>(payload, ['items', 'reports']);
+  }
+
+  async getAiCostOverview(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<AiCostOverview>>(`/admin/ai/costs/overview${toQuery(params)}`);
+    return unwrapData<AiCostOverview>(payload);
+  }
+
+  async getAiCostRecords(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/ai/costs/records${toQuery(params)}`);
+    return adaptList<AiCostRecord>(payload, ['records', 'items']);
+  }
+
+  async getAiCostsByUser(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/ai/costs/by-user${toQuery(params)}`);
+    return adaptList<AiCostByUser>(payload, ['users', 'items']);
   }
 }
 
