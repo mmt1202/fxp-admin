@@ -290,6 +290,9 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +313,126 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.field-label select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.blacklist-page {
+  display: grid;
+  gap: 22px;
+}
+
+.blacklist-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.blacklist-reason {
+  grid-column: 1 / -1;
+}
+
+.blacklist-actions {
+  grid-column: 1 / -1;
+}
+
+.blacklist-list-section {
+  margin-top: 4px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  min-width: min(520px, 100%);
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 180px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: #475569;
+  background: #f8fafc;
+  font-size: 13px;
+}
+
+.data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.type-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.danger-button {
+  background: #dc2626;
+}
+
+.empty-cell {
+  color: #64748b;
+  text-align: center !important;
+}
+
+@media (max-width: 900px) {
+  .blacklist-form {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title-row,
+  .search-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }

@@ -18,6 +18,22 @@ export type AdminUser = Record<string, unknown>;
 export type AdminOrder = Record<string, unknown>;
 export type AiStats = Record<string, unknown>;
 export type CommunityReport = Record<string, unknown>;
+export type RiskBlacklistType = 'USER_ID' | 'PHONE' | 'IP' | 'DEVICE_ID' | 'WECHAT_OPENID';
+export type RiskBlacklist = {
+  id: string | number;
+  type: RiskBlacklistType;
+  value: string;
+  reason?: string;
+  expiresAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+};
+export type CreateRiskBlacklistPayload = {
+  type: RiskBlacklistType;
+  value: string;
+  reason?: string;
+  expiresAt?: string | null;
+};
 
 export type ListResult<T> = {
   items: T[];
@@ -164,6 +180,20 @@ export class ApiClient {
   async getCommunityReports(params?: Record<string, string | number | boolean | undefined>) {
     const payload = await this.get<ApiEnvelope<unknown>>(`/admin/community/reports${toQuery(params)}`);
     return adaptList<CommunityReport>(payload, ['reports']);
+  }
+
+  async getSecurityBlacklist(params?: Record<string, string | number | boolean | undefined>) {
+    const payload = await this.get<ApiEnvelope<unknown>>(`/admin/security/blacklist${toQuery(params)}`);
+    return adaptList<RiskBlacklist>(payload, ['items', 'blacklist', 'riskBlacklists']);
+  }
+
+  async createSecurityBlacklist(data: CreateRiskBlacklistPayload) {
+    const payload = await this.post<ApiEnvelope<RiskBlacklist>>('/admin/security/blacklist', data);
+    return unwrapData<RiskBlacklist>(payload);
+  }
+
+  async deleteSecurityBlacklist(id: string | number) {
+    return this.delete<void>(`/admin/security/blacklist/${encodeURIComponent(String(id))}`);
   }
 }
 
