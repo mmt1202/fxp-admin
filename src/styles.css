@@ -290,6 +290,8 @@ button:disabled {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
 .api-panel {
   width: 100%;
   max-height: 560px;
@@ -310,4 +312,150 @@ button:disabled {
   border-color: #fecaca;
   color: #b91c1c;
   background: #fef2f2;
+}
+
+.city-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.city-summary-grid div {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #eff6ff;
+}
+
+.city-summary-grid strong {
+  color: #1d4ed8;
+  font-size: 28px;
+}
+
+.city-summary-grid span,
+.muted-text {
+  color: #64748b;
+}
+
+.city-config-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.3fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 22px;
+}
+
+.city-list-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-title-row h2,
+.city-list-card h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.city-table {
+  display: grid;
+  gap: 10px;
+}
+
+.city-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.city-row.selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+}
+
+.city-row-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0;
+  color: #0f172a;
+  background: transparent;
+  text-align: left;
+}
+
+.city-row-main span {
+  display: grid;
+  gap: 4px;
+}
+
+.city-row-main small {
+  color: #64748b;
+}
+
+.city-row-main em {
+  align-self: start;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #b45309;
+  background: #fef3c7;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.city-status {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.city-status.enabled {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.city-status.disabled {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.secondary-button {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .city-config-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .city-row {
+    grid-template-columns: 1fr;
+  }
 }

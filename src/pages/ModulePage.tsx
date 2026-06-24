@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../api/client';
-import type { AdminModule } from '../routes/modules';
+import type { AdminModuleKey } from '../routes/modules';
 
 type ModulePageProps = {
   title: string;
   description: string;
-  module: AdminModule['module'];
+  module: Exclude<AdminModuleKey, 'config' | 'city-config'>;
 };
 
 type LoadState = {
@@ -14,7 +14,7 @@ type LoadState = {
   data?: unknown;
 };
 
-const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
+const moduleLoaders: Record<Exclude<AdminModuleKey, 'config' | 'city-config'>, () => Promise<unknown>> = {
   dashboard: async () => {
     const [stats, trend] = await Promise.all([
       apiClient.getDashboard(),
@@ -24,9 +24,9 @@ const moduleLoaders: Record<AdminModule['module'], () => Promise<unknown>> = {
     return { stats, trend };
   },
   users: () => apiClient.getUsers(),
-  orders: () => apiClient.getOrders(),
-  'ai-stats': () => apiClient.getAiStats(),
-  'community-reports': () => apiClient.getCommunityReports(),
+  properties: () => apiClient.get('/admin/properties'),
+  reviews: () => apiClient.get('/admin/reviews'),
+  moderation: () => apiClient.get('/admin/moderation'),
 };
 
 export function ModulePage({ title, description, module }: ModulePageProps) {
@@ -36,8 +36,11 @@ export function ModulePage({ title, description, module }: ModulePageProps) {
   useEffect(() => {
     let ignore = false;
 
-    setState({ loading: true });
-    loader()
+    void Promise.resolve()
+      .then(() => {
+        setState({ loading: true });
+        return loader();
+      })
       .then((data) => {
         if (!ignore) {
           setState({ loading: false, data });
