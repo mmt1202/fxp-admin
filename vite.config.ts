@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import { adminUserProfileMockPlugin } from './src/mocks/adminUserProfilePlugin';
 
 const moderationStatuses = ['published', 'hidden_by_admin', 'rejected'] as const;
 type ModerationStatus = typeof moderationStatuses[number];
@@ -211,7 +212,6 @@ function communityModerationMockApi(): Plugin {
     },
   };
 }
-import { adminUserProfileMockPlugin } from './src/mocks/adminUserProfilePlugin';
 
 export default defineConfig({
   plugins: [react(), communityModerationMockApi(),adminUserProfileMockPlugin()],

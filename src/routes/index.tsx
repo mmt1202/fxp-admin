@@ -4,6 +4,7 @@ import { Login } from '../pages/Login';
 import { ContentModeration } from '../pages/ContentModeration';
 import { AnalyticsPage, DashboardPage } from '../pages/AnalyticsPages';
 import { MarketingCampaigns } from '../pages/MarketingCampaigns';
+import { ContentModeration } from '../pages/ContentModeration';
 import { ModulePage } from '../pages/ModulePage';
 import { RecommendationPools } from '../pages/RecommendationPools';
 import { CmsArticles } from '../pages/CmsArticles';
@@ -52,6 +53,19 @@ import { adminModules } from './modules';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
+  {
+      path: '/',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <Navigate to="/dashboard" replace /> },
+        ...adminModules.map((module) => ({
+          path: module.path.slice(1),
+          element: module.path === '/content-moderation'
+            ? <ContentModeration />
+            : <ModulePage title={module.label} description={module.description} />,
+        })),
+      ],
+    },
   {
       path: '/',
       element: <AdminLayout />,
