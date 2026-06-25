@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAdminUsers, type AdminUserListItem } from '../api/users';
+import { ExportTaskButton } from '../components/ExportTaskButton';
 
 const accountStatusText = {
   active: '正常',
@@ -79,6 +80,7 @@ export function UserListPage() {
           <h1>用户列表</h1>
           <p>查看用户账号、会员、实名与风控概况，并进入详情处理运营操作。</p>
         </div>
+        <ExportTaskButton type="users" />
       </div>
 
       {error && <div className="notice warning">{error}</div>}
