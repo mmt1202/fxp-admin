@@ -5,6 +5,7 @@ import { AppConfigBootstrap } from './components/AppConfigBootstrap';
 import { router } from './routes';
 import './styles.css';
 import './pages/MigratedAdminModules.css';
+import './pages/MoreAdminModules.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { GlobalSearch } from '../components/GlobalSearch';
 import { Sidebar } from '../components/Sidebar';
 import { useAuthStore } from '../store/auth';
 
@@ -31,6 +32,7 @@ export function AdminLayout() {
             <strong>房小评管理后台</strong>
             <span>{meLoading ? '正在加载管理员权限...' : `当前管理员：${currentAdmin?.displayName ?? currentAdmin?.username ?? '未加载'}`}</span>
           </div>
+          <GlobalSearch />
           <button type="button" className="logout-button" onClick={handleLogout}>退出登录</button>
         </header>
         <section className="content-card">

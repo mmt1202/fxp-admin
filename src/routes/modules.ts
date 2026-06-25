@@ -15,7 +15,8 @@ export type AdminModuleKey =
   | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config'
   | 'payment-reconciliation' | 'refunds' | 'ai-review' | 'ai-cost' | 'ai-prompts'
   | 'security-blacklist' | 'risk-watchlist' | 'community-library' | 'login-security'
-  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'admin-announcements';
+  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'admin-announcements'
+  | 'import-tools' | 'export-tasks' | 'app-versions' | 'feature-flags' | 'in-app-messages' | 'push-campaigns';
 
 export type AdminModule = {
   path: string;
@@ -48,6 +49,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/orders', label: '订单管理', icon: '🧾', module: 'orders', description: '查看订单、支付状态、退款进度与履约记录。', permission: 'orders:view' }),
   module({ path: '/finance/reconciliation', label: '支付对账', icon: '💳', module: 'payment-reconciliation', description: '核对本地支付流水与第三方交易状态，支持手动对账、导出和异常修复。' }),
   module({ path: '/finance/refunds', label: '退款管理', icon: '↩️', module: 'refunds', description: '创建退款申请，完成财务审核，并执行第三方退款。' }),
+  module({ path: '/export/tasks', label: '导出中心', icon: '📤', module: 'export-tasks', description: '统一查看用户、订单、举报、AI 用量和支付流水等异步导出任务。', endpoints: [{ method: 'GET', path: '/admin/export/tasks', description: '获取导出任务列表。' }, { method: 'POST', path: '/admin/export/tasks', description: '创建导出任务。' }] }),
   module({ path: '/ai-stats', label: 'AI 用量统计', icon: '🤖', module: 'ai-stats', description: '统计 AI 功能调用量与消耗情况。' }),
   module({ path: '/ai/reviews', label: 'AI 结果审核', icon: '🧪', module: 'ai-review', description: '抽检 AI 评房输出，处理高风险关键词、修正意见和问题样本。' }),
   module({ path: '/ai/costs', label: 'AI 成本监控', icon: '💸', module: 'ai-cost', description: '按时间、模型和用户统计 AI 调用成本，导出成本明细。' }),
@@ -57,15 +59,18 @@ export const adminModules: AdminModule[] = [
   module({ path: '/marketing', label: '运营活动', icon: '🎯', module: 'marketing', description: '配置拉新、促活与转化活动，跟踪奖励发放和订单转化效果。' }),
   module({ path: '/marketing/tools', label: '营销工具', icon: '🎟️', module: 'marketing-tools', description: '管理优惠券批次、兑换码生成、领取记录和使用记录。' }),
   module({ path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', module: 'recall-tasks', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。' }),
+  module({ path: '/push/campaigns', label: 'Push 推送', icon: '📲', module: 'push-campaigns', description: '创建 Push 推送任务，配置目标人群、跳转链接、定时发送并查看效果。', endpoints: [{ method: 'GET', path: '/admin/push/campaigns', description: '获取 Push 任务。' }, { method: 'POST', path: '/admin/push/campaigns', description: '创建 Push 任务。' }] }),
   module({ path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', module: 'recommendation-pools', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。' }),
   module({ path: '/content-quality', label: '内容质量', icon: '🏆', module: 'content-quality', description: '查看社区笔记、评论、房源评价与 AI 报告的质量评分和复核状态。' }),
   module({ path: '/user-lifecycle', label: '用户生命周期', icon: '🔁', module: 'user-lifecycle', description: '分析注册到复购、流失的关键用户转化路径。' }),
   module({ path: '/user-segments', label: '用户分群', icon: '🧩', module: 'user-segments', description: '维护用户分群与运营圈选条件。' }),
   module({ path: '/feedback', label: '用户反馈', icon: '💬', module: 'user-feedback', description: '处理 App 用户反馈，支持筛选、详情、回复和状态流转。' }),
+  module({ path: '/messages', label: '站内信', icon: '✉️', module: 'in-app-messages', description: '创建系统公告、个人通知、活动通知等 App 站内信并发送。', endpoints: [{ method: 'GET', path: '/admin/messages', description: '获取站内信列表。' }, { method: 'POST', path: '/admin/messages', description: '创建站内信。' }] }),
   module({ path: '/support/tickets', label: '客服工单', icon: '🎧', module: 'support-tickets', description: '处理客服工单、转派客服、回复用户和记录内部备注。' }),
   module({ path: '/cms', label: '内容 CMS', icon: '📝', module: 'cms', description: '管理官方文章、Markdown 内容、预览以及发布状态。' }),
   module({ path: '/admin/announcements', label: '后台公告', icon: '📌', module: 'admin-announcements', description: '管理管理员内部公告、Markdown 正文、置顶展示和角色可见范围。', permission: 'announcements:manage', endpoints: [{ method: 'GET', path: '/admin/announcements', description: '获取管理员内部公告列表。' }, { method: 'POST', path: '/admin/announcements', description: '新增管理员内部公告。' }, { method: 'PUT', path: '/admin/announcements/:id', description: '更新管理员内部公告。' }, { method: 'DELETE', path: '/admin/announcements/:id', description: '删除管理员内部公告。' }] }),
   module({ path: '/operation-logs', label: '操作日志', icon: '🧾', module: 'operation-logs', description: '按管理员、操作类型、目标对象与时间范围追踪后台操作。' }),
+  module({ path: '/import/tools', label: '导入工具', icon: '📥', module: 'import-tools', description: '统一处理小区库、敏感词、黑白名单和城市配置批量导入。', endpoints: [{ method: 'POST', path: '/admin/import/tasks', description: '创建导入任务。' }, { method: 'GET', path: '/admin/import/tasks', description: '获取导入任务列表。' }] }),
   module({ path: '/communities', label: '小区库', icon: '🏘️', module: 'community-library', description: '维护小区基础数据、标签、经纬度、风险提示，并支持小区合并。' }),
   module({ path: '/regional-heat', label: '区域热度', icon: '🔥', module: 'regional-heat', description: '按城市、区域与小区分析房源、评价、AI 评房和用户互动热度。' }),
   module({ path: '/geo/cities', label: '城市配置', icon: '🌆', module: 'city-config', description: '配置城市服务开通状态、热门城市、默认经纬度与运营说明。', endpoints: [{ method: 'GET', path: '/admin/geo/cities', description: '获取城市配置列表。' }, { method: 'POST', path: '/admin/geo/cities', description: '新增城市配置。' }, { method: 'PUT', path: '/admin/geo/cities/:id', description: '更新城市配置。' }, { method: 'PUT', path: '/admin/geo/cities/:id/status', description: '更新城市服务开通状态。' }] }),
@@ -74,6 +79,8 @@ export const adminModules: AdminModule[] = [
   module({ path: '/security/watchlist', label: '风险观察名单', icon: '👁️', module: 'risk-watchlist', description: '维护风险用户观察名单，并查看风险事件时间线。' }),
   module({ path: '/system-health', label: '系统监控', icon: '🟢', module: 'system-health', description: '查看 API、数据库、Redis、队列、AI、支付回调与推送服务健康状态。' }),
   module({ path: '/config', label: '配置中心', icon: '⚙️', module: 'config', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
+  module({ path: '/config/app-versions', label: 'App 版本', icon: '📱', module: 'app-versions', description: '维护 iOS / Android 最新版本、最低可用版本、强制更新和灰度比例。' }),
+  module({ path: '/config/feature-flags', label: '功能开关', icon: '🚩', module: 'feature-flags', description: '管理 App 功能启停、灰度比例以及指定城市或用户的开放策略。' }),
   module({ path: '/settings', label: '系统配置', icon: '⚙️', module: 'settings', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
   module({ path: '/risk', label: '风控配置', icon: '🚦', module: 'risk', description: '维护敏感词库、风控规则、命中记录与待审核策略。' }),
   module({ path: '/admin-users', label: '管理员管理', icon: '🔐', module: 'admin-users', description: '管理后台账号、角色、权限点与账号启停状态。', permission: 'admin-users:manage' }),
