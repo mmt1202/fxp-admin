@@ -11,6 +11,7 @@ import { CmsArticles } from '../pages/CmsArticles';
 import { CommunityLibrary } from '../pages/CommunityLibrary';
 import { ContentModeration } from '../pages/ContentModeration';
 import { ContentQuality } from '../pages/ContentQuality';
+import { FeatureFlags } from '../pages/FeatureFlags';
 import { LoginSecurity } from '../pages/LoginSecurity';
 import { MarketingCampaigns } from '../pages/MarketingCampaigns';
 import { MarketingTools } from '../pages/MarketingTools';
@@ -78,6 +79,7 @@ function moduleElement(module: AdminModule) {
     case '/security/blacklist': return <SecurityBlacklist />;
     case '/security/watchlist': return <RiskWatchlistPage />;
     case '/system-health': return <SystemHealth />;
+    case '/config/feature-flags': return <FeatureFlags />;
     case '/config':
     case '/settings': return <SystemConfig />;
     case '/risk': return <RiskConfig />;

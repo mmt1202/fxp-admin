@@ -15,7 +15,7 @@ export type AdminModuleKey =
   | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config'
   | 'payment-reconciliation' | 'refunds' | 'ai-review' | 'ai-cost' | 'ai-prompts'
   | 'security-blacklist' | 'risk-watchlist' | 'community-library' | 'login-security'
-  | 'property-duplicates' | 'support-tickets' | 'user-feedback';
+  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'feature-flags';
 
 export type AdminModule = {
   path: string;
@@ -73,6 +73,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/security/watchlist', label: '风险观察名单', icon: '👁️', module: 'risk-watchlist', description: '维护风险用户观察名单，并查看风险事件时间线。' }),
   module({ path: '/system-health', label: '系统监控', icon: '🟢', module: 'system-health', description: '查看 API、数据库、Redis、队列、AI、支付回调与推送服务健康状态。' }),
   module({ path: '/config', label: '配置中心', icon: '⚙️', module: 'config', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
+  module({ path: '/config/feature-flags', label: '功能开关', icon: '🎚️', module: 'feature-flags', description: '管理 App 功能启停、灰度比例和指定城市或用户开放策略。', endpoints: [{ method: 'GET', path: '/admin/config/feature-flags', description: '获取功能开关配置列表。' }, { method: 'POST', path: '/admin/config/feature-flags', description: '新增功能开关配置。' }, { method: 'PUT', path: '/admin/config/feature-flags/:id', description: '更新指定功能开关配置。' }, { method: 'GET', path: '/app/config', description: 'App 启动时拉取启动配置与功能开关。' }] }),
   module({ path: '/settings', label: '系统配置', icon: '⚙️', module: 'settings', description: '配置后台权限、业务字典、审核策略与接口参数。' }),
   module({ path: '/risk', label: '风控配置', icon: '🚦', module: 'risk', description: '维护敏感词库、风控规则、命中记录与待审核策略。' }),
   module({ path: '/admin-users', label: '管理员管理', icon: '🔐', module: 'admin-users', description: '管理后台账号、角色、权限点与账号启停状态。', permission: 'admin-users:manage' }),

@@ -204,3 +204,52 @@
   "newReviewCount": 45
 }
 ```
+
+## 功能开关配置中心
+
+### FeatureFlag 模型
+
+字段：
+
+- `id`: 功能开关 ID。
+- `key`: 功能开关唯一键，例如 `ai.review.v2`。
+- `name`: 后台展示名称。
+- `enabled`: 是否启用。
+- `rolloutPercent`: 灰度比例，范围 0-100。
+- `targetUsers`: 指定开放用户 ID 列表；为空表示不按用户限制。
+- `targetCities`: 指定开放城市编码或名称列表；为空表示不按城市限制。
+
+### 获取功能开关列表
+
+- Method: `GET`
+- Path: `/admin/config/feature-flags`
+- Response `data.items[]`: `FeatureFlag` 列表。
+
+### 新增功能开关
+
+- Method: `POST`
+- Path: `/admin/config/feature-flags`
+- Body:
+
+```json
+{
+  "key": "ai.review.v2",
+  "name": "AI 评房 V2",
+  "enabled": true,
+  "rolloutPercent": 30,
+  "targetUsers": ["10001", "10002"],
+  "targetCities": ["SH", "HZ"]
+}
+```
+
+### 更新功能开关
+
+- Method: `PUT`
+- Path: `/admin/config/feature-flags/{id}`
+- Body: 同新增功能开关。
+
+### App 启动配置
+
+- Method: `GET`
+- Path: `/app/config`
+- 说明: App 启动时拉取启动配置，响应中的 `featureFlags` 字段携带功能开关列表；App 端可结合 `enabled`、`rolloutPercent`、`targetUsers`、`targetCities` 判断当前用户与城市是否命中。
