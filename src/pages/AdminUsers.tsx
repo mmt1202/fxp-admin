@@ -12,6 +12,7 @@ const permissionLabels: Record<AdminPermission, string> = {
   'orders:view': '订单查看',
   'membership:update': '会员配置',
   'admin-users:manage': '管理员管理',
+  'announcements:manage': '后台公告管理',
 };
 
 const fallbackRoles: AdminRole[] = [

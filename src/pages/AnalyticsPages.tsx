@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { adminAnnouncementsApi, announcementStatusLabels, type AdminAnnouncement } from '../api/announcements';
 import {
   analyticsApi,
   type AnalyticsOverview,
@@ -109,6 +110,30 @@ const fallbackSections: Record<Exclude<AnalyticsTabKey, 'overview'>, AnalyticsSe
   },
 };
 
+
+const fallbackAnnouncements: AdminAnnouncement[] = [
+  {
+    id: 'demo-announcement-1',
+    title: '本周运营复盘请在周五 18:00 前提交',
+    content: '请各业务线在后台公告模块维护复盘链接，便于值班管理员统一跟进。',
+    status: 'published',
+    pinned: true,
+    visibleRoles: ['super_admin', 'ops_admin'],
+    author: '运营中台',
+    publishedAt: '2026-06-22T02:00:00.000Z',
+  },
+  {
+    id: 'demo-announcement-2',
+    title: 'AI 评房 Prompt 灰度期间注意查看风险样本',
+    content: '灰度期间请审核同学优先处理高风险关键词命中的 AI 报告。',
+    status: 'published',
+    pinned: false,
+    visibleRoles: ['super_admin', 'content_admin'],
+    author: 'AI 平台',
+    publishedAt: '2026-06-21T09:30:00.000Z',
+  },
+];
+
 const tabs: Array<{ key: AnalyticsTabKey; label: string }> = [
   { key: 'overview', label: '总览' },
   { key: 'users', label: '用户分析' },
@@ -187,6 +212,50 @@ function useSection(tab: AnalyticsTabKey, range: AnalyticsRange) {
   return state;
 }
 
+
+function useAnnouncements() {
+  const [state, setState] = useState<{ items: AdminAnnouncement[]; loading: boolean; error?: string }>({ items: fallbackAnnouncements, loading: true });
+
+  useEffect(() => {
+    let ignore = false;
+    adminAnnouncementsApi.list({ status: 'published' })
+      .then((result) => {
+        if (!ignore) {
+          const items = result.items
+            .filter((item) => item.status === 'published')
+            .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+          setState({ items, loading: false });
+        }
+      })
+      .catch(() => {
+        if (!ignore) setState({ items: fallbackAnnouncements, loading: false, error: '公告接口暂不可用，当前展示演示公告' });
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  return state;
+}
+
+function AnnouncementPanel({ items, loading, error }: { items: AdminAnnouncement[]; loading: boolean; error?: string }) {
+  return (
+    <section className="analysis-panel admin-announcement-panel">
+      <div className="panel-heading-row"><h2>内部公告</h2><a href="/admin/announcements">管理公告</a></div>
+      {loading ? <p className="status-text">正在加载内部公告...</p> : null}
+      {error ? <p className="status-text warning">{error}</p> : null}
+      {!loading && items.length === 0 ? <p className="muted-text">暂无已发布公告。</p> : null}
+      {items.slice(0, 4).map((item) => (
+        <article className={`announcement-card${item.pinned ? ' pinned' : ''}`} key={item.id}>
+          <strong>{item.pinned ? '📌 ' : ''}{item.title}</strong>
+          <span>{announcementStatusLabels[item.status]} · {item.author ?? '系统'} · {item.visibleRoles.join('、') || '全部角色'}</span>
+          <p>{item.content}</p>
+        </article>
+      ))}
+    </section>
+  );
+}
+
 function MetricGrid({ cards, compact = false }: { cards: MetricCard[]; compact?: boolean }) {
   return (
     <div className={`metric-grid${compact ? ' compact' : ''}`}>
@@ -262,12 +331,14 @@ function Funnel({ data }: { data: AnalyticsOverview['funnel'] }) {
 export function DashboardPage() {
   const [range, setRange] = useState<AnalyticsRange>({ preset: '7d' });
   const overview = useOverview(range);
+  const announcements = useAnnouncements();
   return (
     <div className="analytics-page">
       <p className="eyebrow">核心指标</p>
       <div className="page-heading"><div><h1>数据看板</h1><p>首页聚焦 DAU、收入、会员转化与 AI 调用等核心经营指标。</p></div><RangeFilter value={range} onChange={setRange} /></div>
       <StatusMessage loading={overview.loading} error={overview.error} />
       <MetricGrid cards={overview.data.cards.slice(0, 6)} compact />
+      <AnnouncementPanel items={announcements.items} loading={announcements.loading} error={announcements.error} />
     </div>
   );
 }

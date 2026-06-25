@@ -7,6 +7,7 @@ export const adminPermissions = [
   'orders:view',
   'membership:update',
   'admin-users:manage',
+  'announcements:manage',
 ] as const;
 
 export type AdminPermission = (typeof adminPermissions)[number];
