@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ExportTaskButton } from '../components/ExportTaskButton';
 import { featureApi as apiClient, type PaymentRecord, type ReconciliationRecord, type ReconciliationSummary } from '../api/migratedFeatures';
 
 type FilterState = {
@@ -159,7 +160,8 @@ export function PaymentReconciliation() {
         <label>结束日期<input type="date" value={filters.endDate} onChange={(event) => setFilters((prev) => ({ ...prev, endDate: event.target.value }))} /></label>
         <label>支付渠道<select value={filters.channel} onChange={(event) => setFilters((prev) => ({ ...prev, channel: event.target.value }))}>{channelOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
         <button type="button" onClick={handleRun} disabled={running}>{running ? '对账中...' : '手动对账'}</button>
-        <button type="button" className="secondary-button" onClick={handleExport} disabled={!records.length}>导出结果</button>
+        <button type="button" className="secondary-button" onClick={handleExport} disabled={!records.length}>导出当前结果</button>
+        <ExportTaskButton type="payment_transactions" filters={queryParams} label="导出支付流水" />
       </div>
 
       {message && <p className="status-message saved">{message}</p>}

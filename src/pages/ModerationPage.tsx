@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
+import { ExportTaskButton } from '../components/ExportTaskButton';
 
 type Report = {
   id?: string | number;
@@ -80,6 +81,7 @@ export function ModerationPage() {
       {error && <div className="error-text">{error}</div>}
       <div className="table-toolbar">
         <button onClick={() => void loadReports()} disabled={loading}>{loading ? '刷新中...' : '刷新列表'}</button>
+        <ExportTaskButton type="reports" />
       </div>
       <div className="table-wrap">
         <table className="data-table">

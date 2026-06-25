@@ -11,6 +11,7 @@ import { CmsArticles } from '../pages/CmsArticles';
 import { CommunityLibrary } from '../pages/CommunityLibrary';
 import { ContentModeration } from '../pages/ContentModeration';
 import { ContentQuality } from '../pages/ContentQuality';
+import { ExportTaskCenter } from '../pages/ExportTaskCenter';
 import { LoginSecurity } from '../pages/LoginSecurity';
 import { MarketingCampaigns } from '../pages/MarketingCampaigns';
 import { MarketingTools } from '../pages/MarketingTools';
@@ -63,6 +64,7 @@ function moduleElement(module: AdminModule) {
     case '/user-lifecycle': return <UserLifecycle />;
     case '/user-segments': return <UserSegments />;
     case '/feedback': return <UserFeedback />;
+    case '/export/tasks': return <ExportTaskCenter />;
     case '/support/tickets': return <SupportTickets />;
     case '/cms': return <CmsArticles />;
     case '/operation-logs': return <OperationLogs />;

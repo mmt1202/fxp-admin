@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../api/client';
+import { ExportTaskButton } from '../components/ExportTaskButton';
 import type { AdminListResult, DashboardStats, DashboardTrendPoint } from '../api/client';
 import type { AdminModuleKey } from '../routes/modules';
 
@@ -109,6 +110,9 @@ export function ModulePage({ title, description, module = 'dashboard' }: ModuleP
       <p className="eyebrow">后台模块</p>
       <h1>{title}</h1>
       <p>{description}</p>
+
+      {module === 'orders' && <div className="table-toolbar"><ExportTaskButton type="orders" /></div>}
+      {module === 'ai-stats' && <div className="table-toolbar"><ExportTaskButton type="ai_usage" label="导出 AI 用量" /></div>}
 
       {state.status === 'loading' && <p className="empty-state">正在加载...</p>}
       {state.status === 'error' && <p className="error-state">{state.message}</p>}
