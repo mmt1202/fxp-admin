@@ -204,3 +204,41 @@
   "newReviewCount": 45
 }
 ```
+
+
+## 管理员内部公告
+
+### `AdminAnnouncement` 模型
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `id` | `string` | 公告 ID。 |
+| `title` | `string` | 公告标题。 |
+| `content` | `string` | Markdown / 富文本正文内容。 |
+| `status` | `draft \| published \| offline` | 公告状态：草稿、已发布、已下线。 |
+| `pinned` | `boolean` | 是否在首页内部公告区域置顶展示。 |
+| `visibleRoles` | `string[]` | 可见管理员角色；空数组表示全部角色可见。 |
+| `author` | `string` | 发布人。 |
+| `publishedAt` | `string` | 发布时间 ISO 字符串。 |
+| `createdAt` / `updatedAt` | `string` | 创建和更新时间。 |
+
+### 接口
+
+- `GET /admin/announcements`：获取后台公告列表，支持 `status`、`keyword`、`role`、`page`、`pageSize` 查询参数。
+- `POST /admin/announcements`：新增后台公告。
+- `PUT /admin/announcements/:id`：更新后台公告。
+- `DELETE /admin/announcements/:id`：删除后台公告。
+
+请求体示例：
+
+```json
+{
+  "title": "周五运营复盘提醒",
+  "content": "请各业务线在 18:00 前提交复盘链接。",
+  "status": "published",
+  "pinned": true,
+  "visibleRoles": ["super_admin", "ops_admin"],
+  "author": "运营中台",
+  "publishedAt": "2026-06-22T02:00:00.000Z"
+}
+```

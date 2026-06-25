@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { Login } from '../pages/Login';
+import { AdminAnnouncements } from '../pages/AdminAnnouncements';
 import { AdminUsers } from '../pages/AdminUsers';
 import { AiCostMonitor } from '../pages/AiCostMonitor';
 import { AiPromptManagement } from '../pages/AiPromptManagement';
@@ -65,6 +66,7 @@ function moduleElement(module: AdminModule) {
     case '/feedback': return <UserFeedback />;
     case '/support/tickets': return <SupportTickets />;
     case '/cms': return <CmsArticles />;
+    case '/admin/announcements': return <AdminAnnouncements />;
     case '/operation-logs': return <OperationLogs />;
     case '/communities': return <CommunityLibrary />;
     case '/regional-heat': return <RegionalHeatPage />;

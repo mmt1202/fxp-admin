@@ -15,7 +15,7 @@ export type AdminModuleKey =
   | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config'
   | 'payment-reconciliation' | 'refunds' | 'ai-review' | 'ai-cost' | 'ai-prompts'
   | 'security-blacklist' | 'risk-watchlist' | 'community-library' | 'login-security'
-  | 'property-duplicates' | 'support-tickets' | 'user-feedback';
+  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'admin-announcements';
 
 export type AdminModule = {
   path: string;
@@ -64,6 +64,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/feedback', label: '用户反馈', icon: '💬', module: 'user-feedback', description: '处理 App 用户反馈，支持筛选、详情、回复和状态流转。' }),
   module({ path: '/support/tickets', label: '客服工单', icon: '🎧', module: 'support-tickets', description: '处理客服工单、转派客服、回复用户和记录内部备注。' }),
   module({ path: '/cms', label: '内容 CMS', icon: '📝', module: 'cms', description: '管理官方文章、Markdown 内容、预览以及发布状态。' }),
+  module({ path: '/admin/announcements', label: '后台公告', icon: '📌', module: 'admin-announcements', description: '管理管理员内部公告、Markdown 正文、置顶展示和角色可见范围。', permission: 'announcements:manage', endpoints: [{ method: 'GET', path: '/admin/announcements', description: '获取管理员内部公告列表。' }, { method: 'POST', path: '/admin/announcements', description: '新增管理员内部公告。' }, { method: 'PUT', path: '/admin/announcements/:id', description: '更新管理员内部公告。' }, { method: 'DELETE', path: '/admin/announcements/:id', description: '删除管理员内部公告。' }] }),
   module({ path: '/operation-logs', label: '操作日志', icon: '🧾', module: 'operation-logs', description: '按管理员、操作类型、目标对象与时间范围追踪后台操作。' }),
   module({ path: '/communities', label: '小区库', icon: '🏘️', module: 'community-library', description: '维护小区基础数据、标签、经纬度、风险提示，并支持小区合并。' }),
   module({ path: '/regional-heat', label: '区域热度', icon: '🔥', module: 'regional-heat', description: '按城市、区域与小区分析房源、评价、AI 评房和用户互动热度。' }),
