@@ -34,7 +34,7 @@ const module = (item: Omit<AdminModule, 'endpoints'> & { endpoints?: AdminEndpoi
 });
 
 export const adminModules: AdminModule[] = [
-  module({ path: '/dashboard', label: '数据看板', icon: '📊', module: 'dashboard', description: '核心指标与增长趋势概览。', permission: 'dashboard:view', endpoints: [{ method: 'GET', path: '/admin/dashboard', description: '获取后台数据看板核心指标。' }, { method: 'GET', path: '/admin/dashboard/trend', description: '获取后台数据看板趋势数据。' }] }),
+  module({ path: '/dashboard', label: '数据看板', icon: '📊', module: 'dashboard', description: '核心指标与增长趋势概览。', permission: 'dashboard:view', endpoints: [{ method: 'GET', path: '/admin/dashboard', description: '获取后台数据看板核心指标。' }, { method: 'GET', path: '/admin/dashboard/trend', description: '获取后台数据看板趋势数据。' }, { method: 'GET', path: '/admin/todos', description: '获取后台待办中心数量、最近事项和角色过滤结果。' }] }),
   module({ path: '/analytics', label: '数据分析', icon: '📈', module: 'analytics', description: '按时间范围分析用户、房源、会员转化与 AI 评房数据。' }),
   module({ path: '/users', label: '用户管理', icon: '👥', module: 'users', description: '管理 App 用户资料与账号状态。', permission: 'users:view', endpoints: [{ method: 'GET', path: '/admin/users', description: '获取用户列表。' }, { method: 'PUT', path: '/admin/users/:userId/status', description: '更新指定用户账号状态。' }] }),
   module({ path: '/users/:userId', label: '用户详情', icon: '👤', module: 'users', description: '查看用户资料、会员和举报记录。' }),

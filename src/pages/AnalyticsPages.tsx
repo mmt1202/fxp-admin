@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   analyticsApi,
   type AnalyticsOverview,
@@ -8,6 +9,8 @@ import {
   type RankingItem,
   type TrendPoint,
 } from '../api/analytics';
+import { fetchAdminTodos, type TodoCenter } from '../api/todos';
+import { useAuthStore } from '../store/auth';
 
 type RangePreset = AnalyticsRange['preset'];
 type AnalyticsTabKey = 'overview' | 'users' | 'properties' | 'membership' | 'ai-review';
@@ -108,6 +111,124 @@ const fallbackSections: Record<Exclude<AnalyticsTabKey, 'overview'>, AnalyticsSe
     ],
   },
 };
+
+
+const fallbackTodos: TodoCenter = {
+  total: 39,
+  role: 'demo',
+  updatedAt: '2026-06-25 09:30',
+  categories: [
+    {
+      type: 'content_moderation',
+      label: '内容审核',
+      description: '社区笔记、评论与举报内容待处理',
+      count: 12,
+      targetUrl: '/content-moderation?status=pending&source=todos',
+      items: [
+        { id: 'CM-1024', title: '社区笔记疑似营销内容', description: '命中广告关键词，等待审核', createdAt: '10 分钟前', targetUrl: '/content-moderation?status=pending&contentId=CM-1024' },
+        { id: 'CM-1025', title: '评论举报待复核', description: '3 位用户举报同一评论', createdAt: '26 分钟前', targetUrl: '/content-moderation?status=pending&contentId=CM-1025' },
+      ],
+    },
+    {
+      type: 'property_review',
+      label: '房源治理',
+      description: '重复房源、低完整度与上下架审核',
+      count: 9,
+      targetUrl: '/property-governance?status=pending&source=todos',
+      items: [
+        { id: 'PG-221', title: '浦东新区房源缺少产权信息', description: '完整度低于 60 分', createdAt: '35 分钟前', targetUrl: '/property-governance?status=pending&propertyId=PG-221' },
+      ],
+    },
+    {
+      type: 'refund_review',
+      label: '退款审核',
+      description: '会员订单退款与支付异常复核',
+      count: 7,
+      targetUrl: '/finance/refunds?status=pending&source=todos',
+      items: [
+        { id: 'RF-087', title: '年度会员退款申请', description: '用户提交重复扣款凭证', createdAt: '1 小时前', targetUrl: '/finance/refunds?status=pending&refundId=RF-087' },
+      ],
+    },
+    {
+      type: 'support_ticket',
+      label: '客服工单',
+      description: '待分派、待回复与超时工单',
+      count: 8,
+      targetUrl: '/support/tickets?status=open&source=todos',
+      items: [
+        { id: 'ST-310', title: 'AI 评房报告未生成', description: 'SLA 剩余 25 分钟', createdAt: '18 分钟前', targetUrl: '/support/tickets?status=open&ticketId=ST-310' },
+      ],
+    },
+    {
+      type: 'ai_review',
+      label: 'AI 结果抽检',
+      description: '高风险 AI 输出与问题样本待复核',
+      count: 3,
+      targetUrl: '/ai/reviews?status=pending&source=todos',
+      items: [
+        { id: 'AI-066', title: '价格合理性结论需复核', description: '模型置信度低于阈值', createdAt: '2 小时前', targetUrl: '/ai/reviews?status=pending&sampleId=AI-066' },
+      ],
+    },
+  ],
+};
+
+function useTodoCenter() {
+  const currentAdmin = useAuthStore((state) => state.currentAdmin);
+  const role = currentAdmin?.role.id ?? currentAdmin?.role.name;
+  const [state, setState] = useState<{ data: TodoCenter; loading: boolean; error?: string }>({ data: fallbackTodos, loading: true });
+
+  useEffect(() => {
+    let ignore = false;
+    fetchAdminTodos({ role })
+      .then((data) => {
+        if (!ignore) setState({ data, loading: false });
+      })
+      .catch(() => {
+        if (!ignore) setState({ data: { ...fallbackTodos, role }, loading: false, error: '待办接口暂不可用，当前展示演示数据' });
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [role]);
+
+  return state;
+}
+
+function TodoCenterPanel() {
+  const navigate = useNavigate();
+  const todos = useTodoCenter();
+  return (
+    <section className="todo-center">
+      <div className="todo-center-header">
+        <div>
+          <p className="eyebrow">待办中心</p>
+          <h2>待办总数 <strong>{todos.data.total}</strong></h2>
+          <span>按当前管理员角色过滤 · {todos.data.updatedAt ? `更新于 ${todos.data.updatedAt}` : '实时统计'}</span>
+        </div>
+        {todos.error ? <span className="todo-warning">{todos.error}</span> : todos.loading ? <span className="todo-loading">加载中...</span> : null}
+      </div>
+      <div className="todo-card-grid">
+        {todos.data.categories.map((category) => (
+          <button key={category.type} type="button" className="todo-card" onClick={() => navigate(category.targetUrl)}>
+            <span>{category.label}</span>
+            <strong>{category.count}</strong>
+            <small>{category.description}</small>
+            <em>查看并处理 →</em>
+          </button>
+        ))}
+      </div>
+      <div className="todo-recent-list">
+        {todos.data.categories.flatMap((category) => category.items.map((item) => ({ ...item, category: category.label }))).slice(0, 5).map((item) => (
+          <button key={`${item.category}-${item.id}`} type="button" className="todo-recent-item" onClick={() => navigate(item.targetUrl)}>
+            <span>{item.category}</span>
+            <strong>{item.title}</strong>
+            <small>{item.description} · {item.createdAt}</small>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 const tabs: Array<{ key: AnalyticsTabKey; label: string }> = [
   { key: 'overview', label: '总览' },
@@ -267,6 +388,7 @@ export function DashboardPage() {
       <p className="eyebrow">核心指标</p>
       <div className="page-heading"><div><h1>数据看板</h1><p>首页聚焦 DAU、收入、会员转化与 AI 调用等核心经营指标。</p></div><RangeFilter value={range} onChange={setRange} /></div>
       <StatusMessage loading={overview.loading} error={overview.error} />
+      <TodoCenterPanel />
       <MetricGrid cards={overview.data.cards.slice(0, 6)} compact />
     </div>
   );
