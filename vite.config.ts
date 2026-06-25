@@ -133,6 +133,47 @@ function filteredItems(items: CommunityContent[], searchParams: URLSearchParams)
   });
 }
 
+
+type AdminSearchResult = {
+  type: 'user' | 'order' | 'property' | 'community' | 'report' | 'feedback';
+  title: string;
+  summary: string;
+  url: string;
+  keywords: string;
+};
+
+const globalSearchSeed: AdminSearchResult[] = [
+  { type: 'user', title: '用户 张小满 · U10086', summary: '手机号 138****0086，上海，会员用户', url: '/users/U10086', keywords: '用户 张小满 U10086 138 上海 会员' },
+  { type: 'order', title: '订单 ORD-20260618-0007', summary: 'AI 评房套餐 · 已支付 · ¥29.90', url: '/orders?orderNo=ORD-20260618-0007', keywords: '订单 ORD-20260618-0007 AI 评房 套餐 已支付' },
+  { type: 'property', title: '滨江壹号 2 室 1 厅', summary: '上海 / 浦东新区 · 近地铁，待完善学区信息', url: '/properties?keyword=滨江壹号', keywords: '房源 滨江壹号 上海 浦东新区 地铁 学区' },
+  { type: 'community', title: '滨江壹号小区', summary: '上海浦东新区 · 126 套房源 · 48 条评价', url: '/communities?keyword=滨江壹号', keywords: '小区 滨江壹号 上海 浦东新区 评价 房源' },
+  { type: 'report', title: '举报 RPT-9001 · 广告引流', summary: '举报对象：评论 comment-2002，状态：待处理', url: '/reports?reportId=RPT-9001', keywords: '举报 RPT-9001 广告 引流 comment-2002 待处理' },
+  { type: 'feedback', title: '反馈 FB-3102 · 房源信息错误', summary: '用户反馈户型与图片不一致，等待客服回复', url: '/feedback?feedbackId=FB-3102', keywords: '反馈 FB-3102 房源 信息 错误 户型 图片 客服' },
+];
+
+function globalSearchMockApi(): Plugin {
+  return {
+    name: 'global-search-mock-api',
+    configureServer(server) {
+      server.middlewares.use('/api/admin/search', (request, response, next) => {
+        if (!request.url || request.method !== 'GET') {
+          next();
+          return;
+        }
+
+        const url = new URL(request.url, 'http://localhost');
+        const keyword = url.searchParams.get('q')?.trim().toLowerCase() ?? '';
+        const items = keyword
+          ? globalSearchSeed.filter((item) => `${item.title} ${item.summary} ${item.keywords}`.toLowerCase().includes(keyword))
+              .map((item) => ({ type: item.type, title: item.title, summary: item.summary, url: item.url }))
+          : [];
+
+        sendJson(response, 200, { items, total: items.length });
+      });
+    },
+  };
+}
+
 function communityModerationMockApi(): Plugin {
   return {
     name: 'community-moderation-mock-api',
@@ -214,7 +255,7 @@ function communityModerationMockApi(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), communityModerationMockApi(),adminUserProfileMockPlugin()],
+  plugins: [react(), globalSearchMockApi(), communityModerationMockApi(), adminUserProfileMockPlugin()],
   server: {
     port: 5173,
   },
