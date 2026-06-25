@@ -204,3 +204,87 @@
   "newReviewCount": 45
 }
 ```
+
+## App 版本配置
+
+### 版本配置模型 `AppVersionConfig`
+
+```json
+{
+  "id": "app-version-ios",
+  "platform": "iOS",
+  "latestVersion": "2.5.0",
+  "minSupportedVersion": "2.1.0",
+  "forceUpdate": false,
+  "releaseNotes": "优化 AI 评房报告展示，提升房源详情页加载速度。",
+  "downloadUrl": "https://apps.apple.com/app/fangxiaoping",
+  "rolloutPercentage": 60,
+  "createdAt": "2026-06-20T10:00:00.000Z",
+  "updatedAt": "2026-06-24T09:30:00.000Z"
+}
+```
+
+- `platform`: `iOS` 或 `Android`。
+- `latestVersion`: 当前平台最新版本。
+- `minSupportedVersion`: 最低可用版本，低于该版本时 App 端应强制更新。
+- `forceUpdate`: 是否对当前版本策略启用强制更新。
+- `releaseNotes`: App 展示的更新文案。
+- `downloadUrl`: App Store、应用市场或 APK 下载地址。
+- `rolloutPercentage`: 灰度比例，取值 `0-100`。
+
+### 获取版本配置列表
+
+- Method: `GET`
+- Path: `/admin/config/app-versions`
+- Response `data.items[]`: `AppVersionConfig`。
+
+### 新增版本配置
+
+- Method: `POST`
+- Path: `/admin/config/app-versions`
+- Body:
+
+```json
+{
+  "platform": "Android",
+  "latestVersion": "2.5.1",
+  "minSupportedVersion": "2.0.0",
+  "forceUpdate": true,
+  "releaseNotes": "修复登录态偶发失效问题，请尽快升级以继续使用。",
+  "downloadUrl": "https://example.com/download/fxp.apk",
+  "rolloutPercentage": 100
+}
+```
+
+- Response `data`: 新增后的 `AppVersionConfig`。
+
+### 更新版本配置
+
+- Method: `PUT`
+- Path: `/admin/config/app-versions/{id}`
+- Body: 同新增版本配置。
+- Response `data`: 更新后的 `AppVersionConfig`。
+
+### App 启动版本检查
+
+- Method: `GET`
+- Path: `/app/version-check`
+- Auth: 无需后台认证，App 启动时调用。
+- Query:
+  - `platform`: `iOS` 或 `Android`。
+  - `version`: 当前 App 版本，例如 `2.4.0`。
+  - `deviceId`: 可选，用于后端按设备稳定计算灰度命中。
+- Response `data`:
+
+```json
+{
+  "platform": "iOS",
+  "latestVersion": "2.5.0",
+  "minSupportedVersion": "2.1.0",
+  "updateAvailable": true,
+  "forceUpdate": false,
+  "releaseNotes": "优化 AI 评房报告展示，提升房源详情页加载速度。",
+  "downloadUrl": "https://apps.apple.com/app/fangxiaoping",
+  "rolloutPercentage": 60
+}
+```

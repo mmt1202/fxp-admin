@@ -6,6 +6,7 @@ import { AiCostMonitor } from '../pages/AiCostMonitor';
 import { AiPromptManagement } from '../pages/AiPromptManagement';
 import { AiReviewPage } from '../pages/AiReviewPage';
 import { AnalyticsPage, DashboardPage } from '../pages/AnalyticsPages';
+import { AppVersionManagement } from '../pages/AppVersionManagement';
 import { CityConfig } from '../pages/CityConfig';
 import { CmsArticles } from '../pages/CmsArticles';
 import { CommunityLibrary } from '../pages/CommunityLibrary';
@@ -78,6 +79,7 @@ function moduleElement(module: AdminModule) {
     case '/security/blacklist': return <SecurityBlacklist />;
     case '/security/watchlist': return <RiskWatchlistPage />;
     case '/system-health': return <SystemHealth />;
+    case '/config/app-versions': return <AppVersionManagement />;
     case '/config':
     case '/settings': return <SystemConfig />;
     case '/risk': return <RiskConfig />;

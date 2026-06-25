@@ -84,6 +84,62 @@ const comments: CommunityContent[] = [
   },
 ];
 
+
+type AppVersionConfig = {
+  id: string;
+  platform: 'iOS' | 'Android';
+  latestVersion: string;
+  minSupportedVersion: string;
+  forceUpdate: boolean;
+  releaseNotes: string;
+  downloadUrl: string;
+  rolloutPercentage: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+const appVersions: AppVersionConfig[] = [
+  {
+    id: 'app-version-ios',
+    platform: 'iOS',
+    latestVersion: '2.5.0',
+    minSupportedVersion: '2.1.0',
+    forceUpdate: false,
+    releaseNotes: '优化 AI 评房报告展示，提升房源详情页加载速度。',
+    downloadUrl: 'https://apps.apple.com/app/fangxiaoping',
+    rolloutPercentage: 60,
+    createdAt: '2026-06-20T10:00:00.000Z',
+    updatedAt: '2026-06-24T09:30:00.000Z',
+  },
+  {
+    id: 'app-version-android',
+    platform: 'Android',
+    latestVersion: '2.5.1',
+    minSupportedVersion: '2.0.0',
+    forceUpdate: true,
+    releaseNotes: '修复登录态偶发失效问题，请尽快升级以继续使用。',
+    downloadUrl: 'https://example.com/download/fxp.apk',
+    rolloutPercentage: 100,
+    createdAt: '2026-06-20T10:00:00.000Z',
+    updatedAt: '2026-06-24T09:30:00.000Z',
+  },
+];
+
+function compareVersion(left: string, right: string) {
+  const leftParts = left.split('.').map(Number);
+  const rightParts = right.split('.').map(Number);
+  const length = Math.max(leftParts.length, rightParts.length);
+
+  for (let index = 0; index < length; index += 1) {
+    const diff = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
+    if (diff !== 0) {
+      return diff;
+    }
+  }
+
+  return 0;
+}
+
 function sendJson(response: ServerResponse, statusCode: number, payload: unknown) {
   response.statusCode = statusCode;
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -213,8 +269,101 @@ function communityModerationMockApi(): Plugin {
   };
 }
 
+
+function appVersionMockApi(): Plugin {
+  return {
+    name: 'app-version-mock-api',
+    configureServer(server) {
+      server.middlewares.use('/api', async (request, response, next) => {
+        if (!request.url) {
+          next();
+          return;
+        }
+
+        const url = new URL(request.url, 'http://localhost');
+        const path = url.pathname;
+
+        if (request.method === 'GET' && path === '/admin/config/app-versions') {
+          sendJson(response, 200, { items: appVersions, total: appVersions.length });
+          return;
+        }
+
+        if (request.method === 'POST' && path === '/admin/config/app-versions') {
+          const body = await readBody(request);
+          const now = new Date().toISOString();
+          const item = {
+            id: `app-version-${Date.now()}`,
+            platform: body.platform === 'Android' ? 'Android' : 'iOS',
+            latestVersion: String(body.latestVersion ?? ''),
+            minSupportedVersion: String(body.minSupportedVersion ?? ''),
+            forceUpdate: Boolean(body.forceUpdate),
+            releaseNotes: String(body.releaseNotes ?? ''),
+            downloadUrl: String(body.downloadUrl ?? ''),
+            rolloutPercentage: Number(body.rolloutPercentage ?? 0),
+            createdAt: now,
+            updatedAt: now,
+          } satisfies AppVersionConfig;
+          appVersions.push(item);
+          sendJson(response, 200, item);
+          return;
+        }
+
+        if (request.method === 'PUT' && path.startsWith('/admin/config/app-versions/')) {
+          const id = path.split('/').at(-1);
+          const index = appVersions.findIndex((item) => item.id === id);
+
+          if (index < 0) {
+            sendJson(response, 404, { message: '版本配置不存在' });
+            return;
+          }
+
+          const body = await readBody(request);
+          appVersions[index] = {
+            ...appVersions[index],
+            platform: body.platform === 'Android' ? 'Android' : 'iOS',
+            latestVersion: String(body.latestVersion ?? appVersions[index].latestVersion),
+            minSupportedVersion: String(body.minSupportedVersion ?? appVersions[index].minSupportedVersion),
+            forceUpdate: Boolean(body.forceUpdate),
+            releaseNotes: String(body.releaseNotes ?? appVersions[index].releaseNotes),
+            downloadUrl: String(body.downloadUrl ?? appVersions[index].downloadUrl),
+            rolloutPercentage: Number(body.rolloutPercentage ?? appVersions[index].rolloutPercentage),
+            updatedAt: new Date().toISOString(),
+          };
+          sendJson(response, 200, appVersions[index]);
+          return;
+        }
+
+        if (request.method === 'GET' && path === '/app/version-check') {
+          const platform = url.searchParams.get('platform') === 'Android' ? 'Android' : 'iOS';
+          const currentVersion = url.searchParams.get('version') ?? '0.0.0';
+          const config = appVersions.find((item) => item.platform === platform);
+
+          if (!config) {
+            sendJson(response, 404, { message: '版本配置不存在' });
+            return;
+          }
+
+          sendJson(response, 200, {
+            platform: config.platform,
+            latestVersion: config.latestVersion,
+            minSupportedVersion: config.minSupportedVersion,
+            updateAvailable: compareVersion(currentVersion, config.latestVersion) < 0,
+            forceUpdate: config.forceUpdate || compareVersion(currentVersion, config.minSupportedVersion) < 0,
+            releaseNotes: config.releaseNotes,
+            downloadUrl: config.downloadUrl,
+            rolloutPercentage: config.rolloutPercentage,
+          });
+          return;
+        }
+
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), communityModerationMockApi(),adminUserProfileMockPlugin()],
+  plugins: [react(), communityModerationMockApi(), appVersionMockApi(), adminUserProfileMockPlugin()],
   server: {
     port: 5173,
   },
