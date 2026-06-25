@@ -1,5 +1,6 @@
 import { AiStatsPage } from './pages/AiStatsPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { ImportToolsPage } from './pages/ImportToolsPage';
 import { LoginPage } from './pages/LoginPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { ReportsPage } from './pages/ReportsPage';
@@ -18,6 +19,7 @@ const pageFactories: Record<RouteKey, () => HTMLElement> = {
   orders: OrdersPage,
   'ai-stats': AiStatsPage,
   reports: ReportsPage,
+  'import-tools': ImportToolsPage,
   settings: SettingsPage,
 };
 

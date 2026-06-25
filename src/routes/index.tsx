@@ -12,6 +12,7 @@ import { CommunityLibrary } from '../pages/CommunityLibrary';
 import { ContentModeration } from '../pages/ContentModeration';
 import { ContentQuality } from '../pages/ContentQuality';
 import { LoginSecurity } from '../pages/LoginSecurity';
+import { ImportTools } from '../pages/ImportTools';
 import { MarketingCampaigns } from '../pages/MarketingCampaigns';
 import { MarketingTools } from '../pages/MarketingTools';
 import { MembershipPlans } from '../pages/MembershipPlans';
@@ -65,6 +66,7 @@ function moduleElement(module: AdminModule) {
     case '/feedback': return <UserFeedback />;
     case '/support/tickets': return <SupportTickets />;
     case '/cms': return <CmsArticles />;
+    case '/import-tools': return <ImportTools />;
     case '/operation-logs': return <OperationLogs />;
     case '/communities': return <CommunityLibrary />;
     case '/regional-heat': return <RegionalHeatPage />;

@@ -1,6 +1,6 @@
-export type RouteKey = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings';
+export type RouteKey = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings' | 'import-tools';
 
-export type AppRoute = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings';
+export type AppRoute = 'dashboard' | 'users' | 'orders' | 'ai-stats' | 'reports' | 'settings' | 'import-tools';
 
 export type MenuItem = {
   key: RouteKey;
@@ -17,6 +17,7 @@ export const menuItems: MenuItem[] = [
   { key: 'orders', route: 'orders', path: '/orders', label: '订单管理', icon: '🧾', description: '查看订单状态、退款售后、支付流水与履约异常。' },
   { key: 'ai-stats', route: 'ai-stats', path: '/ai-stats', label: 'AI 统计', icon: '🤖', description: '追踪 AI 调用量、成功率、成本与模型表现。' },
   { key: 'reports', route: 'reports', path: '/reports', label: '报表中心', icon: '📈', description: '汇总运营报表、导出任务、周期指标与业务洞察。' },
+  { key: 'import-tools', route: 'import-tools', path: '/import-tools', label: '导入工具', icon: '📥', description: '批量导入小区库、敏感词、黑白名单和城市配置。' },
   { key: 'settings', route: 'settings', path: '/settings', label: '系统配置', icon: '⚙️', description: '配置后台权限、业务字典、审核策略与接口参数。' },
 ];
 

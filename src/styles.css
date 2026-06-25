@@ -4526,3 +4526,46 @@ tr:last-child td {
     grid-template-columns: 1fr;
   }
 }
+
+.panel-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.panel-card h2 {
+  margin-top: 0;
+}
+
+.helper-text {
+  margin: 12px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.import-page .filter-bar input[type="file"] {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.import-page .action-group a.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #1d4ed8;
+  background: #dbeafe;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
