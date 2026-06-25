@@ -22,6 +22,7 @@ import { PaymentReconciliation } from '../pages/PaymentReconciliation';
 import { PropertyDuplicates } from '../pages/PropertyDuplicates';
 import { PropertyGovernance } from '../pages/PropertyGovernance';
 import { PropertyManagement } from '../pages/PropertyManagement';
+import { PushCampaigns } from '../pages/PushCampaigns';
 import { RecallTasks } from '../pages/RecallTasks';
 import { RecommendationPools } from '../pages/RecommendationPools';
 import { RefundManagement } from '../pages/RefundManagement';
@@ -58,6 +59,7 @@ function moduleElement(module: AdminModule) {
     case '/marketing': return <MarketingCampaigns />;
     case '/marketing/tools': return <MarketingTools />;
     case '/marketing/recall-tasks': return <RecallTasks />;
+    case '/push/campaigns': return <PushCampaigns />;
     case '/recommendation-pools': return <RecommendationPools />;
     case '/content-quality': return <ContentQuality />;
     case '/user-lifecycle': return <UserLifecycle />;

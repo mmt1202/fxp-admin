@@ -15,7 +15,7 @@ export type AdminModuleKey =
   | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config'
   | 'payment-reconciliation' | 'refunds' | 'ai-review' | 'ai-cost' | 'ai-prompts'
   | 'security-blacklist' | 'risk-watchlist' | 'community-library' | 'login-security'
-  | 'property-duplicates' | 'support-tickets' | 'user-feedback';
+  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'push';
 
 export type AdminModule = {
   path: string;
@@ -57,6 +57,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/marketing', label: '运营活动', icon: '🎯', module: 'marketing', description: '配置拉新、促活与转化活动，跟踪奖励发放和订单转化效果。' }),
   module({ path: '/marketing/tools', label: '营销工具', icon: '🎟️', module: 'marketing-tools', description: '管理优惠券批次、兑换码生成、领取记录和使用记录。' }),
   module({ path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', module: 'recall-tasks', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。' }),
+  module({ path: '/push/campaigns', label: 'Push 推送', icon: '📲', module: 'push', description: '创建 PushCampaign 推送任务，支持全部用户、指定用户、标签、分层和定时推送。', endpoints: [{ method: 'GET', path: '/admin/push/campaigns', description: '获取 Push 任务列表。' }, { method: 'POST', path: '/admin/push/campaigns', description: '创建 Push 任务。' }, { method: 'POST', path: '/admin/push/campaigns/:id/send', description: '立即发送指定 Push 任务。' }, { method: 'GET', path: '/admin/push/campaigns/:id/stats', description: '获取 Push 任务送达率与点击率。' }] }),
   module({ path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', module: 'recommendation-pools', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。' }),
   module({ path: '/content-quality', label: '内容质量', icon: '🏆', module: 'content-quality', description: '查看社区笔记、评论、房源评价与 AI 报告的质量评分和复核状态。' }),
   module({ path: '/user-lifecycle', label: '用户生命周期', icon: '🔁', module: 'user-lifecycle', description: '分析注册到复购、流失的关键用户转化路径。' }),
