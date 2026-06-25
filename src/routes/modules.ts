@@ -15,7 +15,7 @@ export type AdminModuleKey =
   | 'property-governance' | 'marketing' | 'marketing-tools' | 'user-segments' | 'city-config'
   | 'payment-reconciliation' | 'refunds' | 'ai-review' | 'ai-cost' | 'ai-prompts'
   | 'security-blacklist' | 'risk-watchlist' | 'community-library' | 'login-security'
-  | 'property-duplicates' | 'support-tickets' | 'user-feedback';
+  | 'property-duplicates' | 'support-tickets' | 'user-feedback' | 'in-app-messages';
 
 export type AdminModule = {
   path: string;
@@ -62,6 +62,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/user-lifecycle', label: '用户生命周期', icon: '🔁', module: 'user-lifecycle', description: '分析注册到复购、流失的关键用户转化路径。' }),
   module({ path: '/user-segments', label: '用户分群', icon: '🧩', module: 'user-segments', description: '维护用户分群与运营圈选条件。' }),
   module({ path: '/feedback', label: '用户反馈', icon: '💬', module: 'user-feedback', description: '处理 App 用户反馈，支持筛选、详情、回复和状态流转。' }),
+  module({ path: '/messages', label: '站内信管理', icon: '📨', module: 'in-app-messages', description: '创建站内信、圈选目标用户、预览内容并发送到 App。', endpoints: [{ method: 'GET', path: '/admin/messages', description: '获取后台站内信列表。' }, { method: 'POST', path: '/admin/messages', description: '创建站内信草稿。' }, { method: 'GET', path: '/admin/messages/:id', description: '获取站内信详情。' }, { method: 'POST', path: '/admin/messages/:id/send', description: '发送站内信。' }, { method: 'GET', path: '/app/messages', description: 'App 端获取站内信列表。' }, { method: 'POST', path: '/app/messages/read', description: 'App 端批量标记站内信已读。' }] }),
   module({ path: '/support/tickets', label: '客服工单', icon: '🎧', module: 'support-tickets', description: '处理客服工单、转派客服、回复用户和记录内部备注。' }),
   module({ path: '/cms', label: '内容 CMS', icon: '📝', module: 'cms', description: '管理官方文章、Markdown 内容、预览以及发布状态。' }),
   module({ path: '/operation-logs', label: '操作日志', icon: '🧾', module: 'operation-logs', description: '按管理员、操作类型、目标对象与时间范围追踪后台操作。' }),

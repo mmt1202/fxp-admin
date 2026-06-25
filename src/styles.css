@@ -4526,3 +4526,143 @@ tr:last-child td {
     grid-template-columns: 1fr;
   }
 }
+
+.messages-page {
+  display: grid;
+  gap: 20px;
+}
+
+.messages-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.messages-stats div,
+.message-preview {
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 16px;
+  background: #f8fbff;
+}
+
+.messages-stats strong {
+  display: block;
+  color: #0f172a;
+  font-size: 26px;
+}
+
+.messages-stats span,
+.message-preview small,
+.message-list-item small,
+.message-list-item span {
+  color: #64748b;
+}
+
+.messages-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(280px, 0.9fr) minmax(300px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.message-form,
+.message-form label,
+.message-list,
+.message-detail {
+  display: grid;
+  gap: 12px;
+}
+
+.message-form label {
+  color: #475569;
+  font-weight: 700;
+}
+
+.message-form input,
+.message-form select,
+.message-form textarea,
+.message-list-header select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.message-preview h3,
+.message-preview p,
+.message-detail h3,
+.message-detail p {
+  margin: 6px 0;
+}
+
+.message-list-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.message-list-item {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  color: #0f172a;
+  text-align: left;
+  background: #fff;
+}
+
+.message-list-item.active,
+.message-list-item:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.message-status {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.message-status.draft { background: #64748b; }
+.message-status.scheduled { background: #f59e0b; }
+.message-status.sent { background: #16a34a; }
+.message-status.archived { background: #475569; }
+
+.message-detail dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.message-detail dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.message-detail dt {
+  color: #64748b;
+}
+
+.message-detail dd {
+  margin: 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+@media (max-width: 1180px) {
+  .messages-layout,
+  .messages-stats {
+    grid-template-columns: 1fr;
+  }
+}

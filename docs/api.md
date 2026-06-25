@@ -204,3 +204,36 @@
   "newReviewCount": 45
 }
 ```
+
+## 站内信管理 API
+
+### InAppMessage 模型
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| id | string | 消息 ID |
+| title | string | 消息标题 |
+| content | string | 消息正文 |
+| type | enum | `system_announcement` 系统公告、`personal_notice` 个人通知、`activity_notice` 活动通知、`review_notice` 审核通知、`membership_notice` 会员通知 |
+| status | enum | `draft` 草稿、`scheduled` 待发送、`sent` 已发送、`archived` 已归档 |
+| targetType | enum | `all` 全部用户、`users` 指定用户、`segment` 用户分群 |
+| targetUserIds | string[] | 指定用户 ID 列表 |
+| targetSegment | string | 用户分群标识 |
+| linkUrl | string | App 内跳转链接 |
+| sendAt | string | 定时发送时间 |
+| sentAt | string | 实际发送时间 |
+| deliveredCount | number | 触达用户数 |
+| readCount | number | 已读用户数 |
+| createdAt / updatedAt | string | 创建和更新时间 |
+
+### 后台接口
+
+- `GET /admin/messages`：按 `type`、`status`、`targetType`、关键词和分页参数查询站内信列表。
+- `POST /admin/messages`：创建站内信草稿或定时消息。
+- `GET /admin/messages/:id`：查看站内信详情、触达统计和已读统计。
+- `POST /admin/messages/:id/send`：立即发送站内信，后台应校验目标用户并写入用户收件箱。
+
+### App 端接口
+
+- `GET /app/messages`：获取当前登录用户站内信列表，支持 `unreadOnly`、`type` 和分页参数。
+- `POST /app/messages/read`：批量标记已读，请求体为 `{ "messageIds": ["msg_1", "msg_2"] }`。
