@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { adminAnnouncementsApi, announcementStatusLabels, type AdminAnnouncement } from '../api/announcements';
 import {
   analyticsApi,
@@ -9,26 +10,12 @@ import {
   type RankingItem,
   type TrendPoint,
 } from '../api/analytics';
+import { fetchAdminTodos, type TodoCenter } from '../api/todos';
+import { useAuthStore } from '../store/auth';
 
 type RangePreset = AnalyticsRange['preset'];
 type AnalyticsTabKey = 'overview' | 'users' | 'properties' | 'membership' | 'ai-review';
-
-type RangeFilterProps = {
-  value: AnalyticsRange;
-  onChange: (range: AnalyticsRange) => void;
-};
-
-type AnalyticsState = {
-  data: AnalyticsOverview;
-  loading: boolean;
-  error?: string;
-};
-
-type SectionState = {
-  data: AnalyticsSection;
-  loading: boolean;
-  error?: string;
-};
+type LoadState<T> = { data: T; loading: boolean; error?: string };
 
 const metrics: MetricCard[] = [
   { label: 'DAU', value: '8,426', delta: '+12.4%', hint: '今日活跃用户' },
@@ -72,66 +59,28 @@ const fallbackOverview: AnalyticsOverview = {
 };
 
 const fallbackSections: Record<Exclude<AnalyticsTabKey, 'overview'>, AnalyticsSection> = {
-  users: {
-    title: '用户分析',
-    cards: metrics.slice(0, 5),
-    trend,
-    table: [
-      { name: '新用户注册', value: '3,218', meta: '转化率 18.6%' },
-      { name: '活跃用户回访', value: '42,180', meta: 'WAU' },
-      { name: '沉默用户召回', value: '1,126', meta: '短信/Push 触达' },
-    ],
-  },
-  properties: {
-    title: '房源分析',
-    cards: [metrics[5], metrics[6], metrics[0], metrics[4]],
-    trend,
-    table: fallbackOverview.rankings,
-  },
-  membership: {
-    title: '会员转化',
-    cards: [metrics[7], metrics[8], metrics[9], metrics[3]],
-    trend,
-    table: [
-      { name: '月度会员', value: '2,184', meta: '¥29 档' },
-      { name: '季度会员', value: '948', meta: '¥79 档' },
-      { name: '年度会员', value: '562', meta: '¥199 档' },
-    ],
-  },
-  'ai-review': {
-    title: 'AI 评房',
-    cards: [metrics[6], metrics[5], metrics[7], metrics[8]],
-    trend,
-    table: [
-      { name: '户型风险识别', value: '4,812', meta: '调用量' },
-      { name: '小区配套分析', value: '3,624', meta: '调用量' },
-      { name: '价格合理性评估', value: '2,986', meta: '调用量' },
-    ],
-  },
+  users: { title: '用户分析', cards: metrics.slice(0, 5), trend, table: [{ name: '新用户注册', value: '3,218', meta: '转化率 18.6%' }, { name: '活跃用户回访', value: '42,180', meta: 'WAU' }, { name: '沉默用户召回', value: '1,126', meta: '短信/Push 触达' }] },
+  properties: { title: '房源分析', cards: [metrics[5], metrics[6], metrics[0], metrics[4]], trend, table: fallbackOverview.rankings },
+  membership: { title: '会员转化', cards: [metrics[7], metrics[8], metrics[9], metrics[3]], trend, table: [{ name: '月度会员', value: '2,184', meta: '¥29 档' }, { name: '季度会员', value: '948', meta: '¥79 档' }, { name: '年度会员', value: '562', meta: '¥199 档' }] },
+  'ai-review': { title: 'AI 评房', cards: [metrics[6], metrics[5], metrics[7], metrics[8]], trend, table: [{ name: '户型风险识别', value: '4,812', meta: '调用量' }, { name: '小区配套分析', value: '3,624', meta: '调用量' }, { name: '价格合理性评估', value: '2,986', meta: '调用量' }] },
 };
 
+const fallbackTodos: TodoCenter = {
+  total: 39,
+  role: 'demo',
+  updatedAt: '2026-06-25 09:30',
+  categories: [
+    { type: 'content_moderation', label: '内容审核', description: '社区笔记、评论与举报内容待处理', count: 12, targetUrl: '/content-moderation?status=pending&source=todos', items: [{ id: 'CM-1024', title: '社区笔记疑似营销内容', description: '命中广告关键词，等待审核', createdAt: '10 分钟前', targetUrl: '/content-moderation?status=pending&contentId=CM-1024' }] },
+    { type: 'property_review', label: '房源治理', description: '重复房源、低完整度与上下架审核', count: 9, targetUrl: '/property-governance?status=pending&source=todos', items: [{ id: 'PG-221', title: '浦东新区房源缺少产权信息', description: '完整度低于 60 分', createdAt: '35 分钟前', targetUrl: '/property-governance?status=pending&propertyId=PG-221' }] },
+    { type: 'refund_review', label: '退款审核', description: '会员订单退款与支付异常复核', count: 7, targetUrl: '/finance/refunds?status=pending&source=todos', items: [{ id: 'RF-087', title: '年度会员退款申请', description: '用户提交重复扣款凭证', createdAt: '1 小时前', targetUrl: '/finance/refunds?status=pending&refundId=RF-087' }] },
+    { type: 'support_ticket', label: '客服工单', description: '待分派、待回复与超时工单', count: 8, targetUrl: '/support/tickets?status=open&source=todos', items: [{ id: 'ST-310', title: 'AI 评房报告未生成', description: 'SLA 剩余 25 分钟', createdAt: '18 分钟前', targetUrl: '/support/tickets?status=open&ticketId=ST-310' }] },
+    { type: 'ai_review', label: 'AI 结果抽检', description: '高风险 AI 输出与问题样本待复核', count: 3, targetUrl: '/ai/reviews?status=pending&source=todos', items: [{ id: 'AI-066', title: '价格合理性结论需复核', description: '模型置信度低于阈值', createdAt: '2 小时前', targetUrl: '/ai/reviews?status=pending&sampleId=AI-066' }] },
+  ],
+};
 
 const fallbackAnnouncements: AdminAnnouncement[] = [
-  {
-    id: 'demo-announcement-1',
-    title: '本周运营复盘请在周五 18:00 前提交',
-    content: '请各业务线在后台公告模块维护复盘链接，便于值班管理员统一跟进。',
-    status: 'published',
-    pinned: true,
-    visibleRoles: ['super_admin', 'ops_admin'],
-    author: '运营中台',
-    publishedAt: '2026-06-22T02:00:00.000Z',
-  },
-  {
-    id: 'demo-announcement-2',
-    title: 'AI 评房 Prompt 灰度期间注意查看风险样本',
-    content: '灰度期间请审核同学优先处理高风险关键词命中的 AI 报告。',
-    status: 'published',
-    pinned: false,
-    visibleRoles: ['super_admin', 'content_admin'],
-    author: 'AI 平台',
-    publishedAt: '2026-06-21T09:30:00.000Z',
-  },
+  { id: 'demo-announcement-1', title: '本周运营复盘请在周五 18:00 前提交', content: '请各业务线在后台公告模块维护复盘链接，便于值班管理员统一跟进。', status: 'published', pinned: true, visibleRoles: ['super_admin', 'ops_admin'], author: '运营中台', publishedAt: '2026-06-22T02:00:00.000Z' },
+  { id: 'demo-announcement-2', title: 'AI 评房 Prompt 灰度期间注意查看风险样本', content: '灰度期间请审核同学优先处理高风险关键词命中的 AI 报告。', status: 'published', pinned: false, visibleRoles: ['super_admin', 'content_admin'], author: 'AI 平台', publishedAt: '2026-06-21T09:30:00.000Z' },
 ];
 
 const tabs: Array<{ key: AnalyticsTabKey; label: string }> = [
@@ -149,125 +98,78 @@ const sectionLoaders = {
   'ai-review': analyticsApi.getAiReview,
 };
 
-function RangeFilter({ value, onChange }: RangeFilterProps) {
-  const showCustom = value.preset === 'custom';
+function RangeFilter({ value, onChange }: { value: AnalyticsRange; onChange: (range: AnalyticsRange) => void }) {
   const updatePreset = (preset: RangePreset) => onChange({ ...value, preset });
-  return (
-    <div className="range-filter" aria-label="时间范围筛选">
-      {(['today', '7d', '30d', 'custom'] as RangePreset[]).map((item) => (
-        <button key={item} type="button" className={value.preset === item ? 'active' : ''} onClick={() => updatePreset(item)}>
-          {item === 'today' ? '今日' : item === '7d' ? '近 7 天' : item === '30d' ? '近 30 天' : '自定义时间'}
-        </button>
-      ))}
-      {showCustom && (
-        <div className="custom-range">
-          <input type="date" value={value.startDate ?? ''} onChange={(event) => onChange({ ...value, startDate: event.target.value })} />
-          <span>至</span>
-          <input type="date" value={value.endDate ?? ''} onChange={(event) => onChange({ ...value, endDate: event.target.value })} />
-        </div>
-      )}
-    </div>
-  );
+  return <div className="range-filter" aria-label="时间范围筛选">{(['today', '7d', '30d', 'custom'] as RangePreset[]).map((item) => <button key={item} type="button" className={value.preset === item ? 'active' : ''} onClick={() => updatePreset(item)}>{item === 'today' ? '今日' : item === '7d' ? '近 7 天' : item === '30d' ? '近 30 天' : '自定义时间'}</button>)}{value.preset === 'custom' ? <div className="custom-range"><input type="date" value={value.startDate ?? ''} onChange={(event) => onChange({ ...value, startDate: event.target.value })} /><span>至</span><input type="date" value={value.endDate ?? ''} onChange={(event) => onChange({ ...value, endDate: event.target.value })} /></div> : null}</div>;
 }
 
 function useOverview(range: AnalyticsRange) {
-  const [state, setState] = useState<AnalyticsState>({ data: fallbackOverview, loading: true });
-
+  const [state, setState] = useState<LoadState<AnalyticsOverview>>({ data: fallbackOverview, loading: true });
   useEffect(() => {
     let ignore = false;
-    analyticsApi.getOverview(range)
-      .then((data) => {
-        if (!ignore) setState({ data, loading: false });
-      })
-      .catch(() => {
-        if (!ignore) setState({ data: fallbackOverview, loading: false, error: '接口暂不可用，当前展示演示数据' });
-      });
-    return () => {
-      ignore = true;
-    };
+    queueMicrotask(() => {
+      analyticsApi.getOverview(range).then((data) => { if (!ignore) setState({ data, loading: false }); }).catch(() => { if (!ignore) setState({ data: fallbackOverview, loading: false, error: '接口暂不可用，当前展示演示数据' }); });
+    });
+    return () => { ignore = true; };
   }, [range]);
-
   return state;
 }
 
 function useSection(tab: AnalyticsTabKey, range: AnalyticsRange) {
   const fallback = tab === 'overview' ? fallbackSections.users : fallbackSections[tab];
-  const [state, setState] = useState<SectionState>({ data: fallback, loading: false });
-
+  const [state, setState] = useState<LoadState<AnalyticsSection>>({ data: fallback, loading: false });
   useEffect(() => {
     if (tab === 'overview') return;
     let ignore = false;
-    sectionLoaders[tab](range)
-      .then((data) => {
-        if (!ignore) setState({ data, loading: false });
-      })
-      .catch(() => {
-        if (!ignore) setState({ data: fallbackSections[tab], loading: false, error: '接口暂不可用，当前展示演示数据' });
-      });
-    return () => {
-      ignore = true;
-    };
+    queueMicrotask(() => {
+      sectionLoaders[tab](range).then((data) => { if (!ignore) setState({ data, loading: false }); }).catch(() => { if (!ignore) setState({ data: fallbackSections[tab], loading: false, error: '接口暂不可用，当前展示演示数据' }); });
+    });
+    return () => { ignore = true; };
   }, [fallback, range, tab]);
-
   return state;
 }
-
 
 function useAnnouncements() {
   const [state, setState] = useState<{ items: AdminAnnouncement[]; loading: boolean; error?: string }>({ items: fallbackAnnouncements, loading: true });
-
   useEffect(() => {
     let ignore = false;
-    adminAnnouncementsApi.list({ status: 'published' })
-      .then((result) => {
-        if (!ignore) {
-          const items = result.items
-            .filter((item) => item.status === 'published')
-            .sort((a, b) => Number(b.pinned) - Number(a.pinned));
-          setState({ items, loading: false });
-        }
-      })
-      .catch(() => {
-        if (!ignore) setState({ items: fallbackAnnouncements, loading: false, error: '公告接口暂不可用，当前展示演示公告' });
-      });
-    return () => {
-      ignore = true;
-    };
+    queueMicrotask(() => {
+      adminAnnouncementsApi.list({ status: 'published' }).then((result) => {
+        if (!ignore) setState({ items: result.items.filter((item) => item.status === 'published').sort((a, b) => Number(b.pinned) - Number(a.pinned)), loading: false });
+      }).catch(() => { if (!ignore) setState({ items: fallbackAnnouncements, loading: false, error: '公告接口暂不可用，当前展示演示公告' }); });
+    });
+    return () => { ignore = true; };
   }, []);
-
   return state;
 }
 
+function useTodoCenter() {
+  const currentAdmin = useAuthStore((state) => state.currentAdmin);
+  const role = currentAdmin?.role.id ?? currentAdmin?.role.name;
+  const [state, setState] = useState<LoadState<TodoCenter>>({ data: fallbackTodos, loading: true });
+  useEffect(() => {
+    let ignore = false;
+    queueMicrotask(() => {
+      fetchAdminTodos({ role }).then((data) => { if (!ignore) setState({ data, loading: false }); }).catch(() => { if (!ignore) setState({ data: { ...fallbackTodos, role }, loading: false, error: '待办接口暂不可用，当前展示演示数据' }); });
+    });
+    return () => { ignore = true; };
+  }, [role]);
+  return state;
+}
+
+function TodoCenterPanel() {
+  const navigate = useNavigate();
+  const todos = useTodoCenter();
+  const recent = todos.data.categories.flatMap((category) => category.items.map((item) => ({ ...item, category: category.label }))).slice(0, 5);
+  return <section className="todo-center"><div className="todo-center-header"><div><p className="eyebrow">待办中心</p><h2>待办总数 <strong>{todos.data.total}</strong></h2><span>按当前管理员角色过滤 · {todos.data.updatedAt ? `更新于 ${todos.data.updatedAt}` : '实时统计'}</span></div>{todos.error ? <span className="todo-warning">{todos.error}</span> : todos.loading ? <span className="todo-loading">加载中...</span> : null}</div><div className="todo-card-grid">{todos.data.categories.map((category) => <button key={category.type} type="button" className="todo-card" onClick={() => navigate(category.targetUrl)}><span>{category.label}</span><strong>{category.count}</strong><small>{category.description}</small><em>查看并处理 →</em></button>)}</div><div className="todo-recent-list">{recent.map((item) => <button key={`${item.category}-${item.id}`} type="button" className="todo-recent-item" onClick={() => navigate(item.targetUrl)}><span>{item.category}</span><strong>{item.title}</strong><small>{item.description} · {item.createdAt}</small></button>)}</div></section>;
+}
+
 function AnnouncementPanel({ items, loading, error }: { items: AdminAnnouncement[]; loading: boolean; error?: string }) {
-  return (
-    <section className="analysis-panel admin-announcement-panel">
-      <div className="panel-heading-row"><h2>内部公告</h2><a href="/admin/announcements">管理公告</a></div>
-      {loading ? <p className="status-text">正在加载内部公告...</p> : null}
-      {error ? <p className="status-text warning">{error}</p> : null}
-      {!loading && items.length === 0 ? <p className="muted-text">暂无已发布公告。</p> : null}
-      {items.slice(0, 4).map((item) => (
-        <article className={`announcement-card${item.pinned ? ' pinned' : ''}`} key={item.id}>
-          <strong>{item.pinned ? '📌 ' : ''}{item.title}</strong>
-          <span>{announcementStatusLabels[item.status]} · {item.author ?? '系统'} · {item.visibleRoles.join('、') || '全部角色'}</span>
-          <p>{item.content}</p>
-        </article>
-      ))}
-    </section>
-  );
+  return <section className="analysis-panel admin-announcement-panel"><div className="panel-heading-row"><h2>内部公告</h2><a href="/admin/announcements">管理公告</a></div>{loading ? <p className="status-text">正在加载内部公告...</p> : null}{error ? <p className="status-text warning">{error}</p> : null}{!loading && items.length === 0 ? <p className="muted-text">暂无已发布公告。</p> : null}{items.slice(0, 4).map((item) => <article className={`announcement-card${item.pinned ? ' pinned' : ''}`} key={item.id}><strong>{item.pinned ? '📌 ' : ''}{item.title}</strong><span>{announcementStatusLabels[item.status]} · {item.author ?? '系统'} · {item.visibleRoles.join('、') || '全部角色'}</span><p>{item.content}</p></article>)}</section>;
 }
 
 function MetricGrid({ cards, compact = false }: { cards: MetricCard[]; compact?: boolean }) {
-  return (
-    <div className={`metric-grid${compact ? ' compact' : ''}`}>
-      {cards.map((card) => (
-        <article className="metric-card" key={card.label}>
-          <span>{card.label}</span>
-          <strong>{card.value}</strong>
-          <small>{card.delta} · {card.hint}</small>
-        </article>
-      ))}
-    </div>
-  );
+  return <div className={`metric-grid${compact ? ' compact' : ''}`}>{cards.map((card) => <article className="metric-card" key={card.label}><span>{card.label}</span><strong>{card.value}</strong><small>{card.delta} · {card.hint}</small></article>)}</div>;
 }
 
 function StatusMessage({ loading, error }: { loading: boolean; error?: string }) {
@@ -278,69 +180,23 @@ function StatusMessage({ loading, error }: { loading: boolean; error?: string })
 
 function TrendChart({ data }: { data: TrendPoint[] }) {
   const max = useMemo(() => Math.max(...data.map((item) => item.users), 1), [data]);
-  return (
-    <section className="analysis-panel wide">
-      <h2>趋势图</h2>
-      <div className="bar-chart">
-        {data.map((item) => (
-          <div className="bar-item" key={item.date}>
-            <div className="bar" style={{ height: `${(item.users / max) * 100}%` }} title={`${item.users} 活跃用户`} />
-            <span>{item.date}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <section className="analysis-panel wide"><h2>趋势图</h2><div className="bar-chart">{data.map((item) => <div className="bar-item" key={item.date}><div className="bar" style={{ height: `${(item.users / max) * 100}%` }} title={`${item.users} 活跃用户`} /><span>{item.date}</span></div>)}</div></section>;
 }
 
 function RankingTable({ items }: { items: RankingItem[] }) {
-  return (
-    <section className="analysis-panel">
-      <h2>排行表</h2>
-      <table>
-        <tbody>
-          {items.map((item, index) => (
-            <tr key={item.name}>
-              <td>#{index + 1}</td>
-              <td>{item.name}<small>{item.meta}</small></td>
-              <td>{item.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
-  );
+  return <section className="analysis-panel"><h2>排行表</h2><table><tbody>{items.map((item, index) => <tr key={item.name}><td>#{index + 1}</td><td>{item.name}<small>{item.meta}</small></td><td>{item.value}</td></tr>)}</tbody></table></section>;
 }
 
 function Funnel({ data }: { data: AnalyticsOverview['funnel'] }) {
   const max = Math.max(data[0]?.count ?? 1, 1);
-  return (
-    <section className="analysis-panel">
-      <h2>转化漏斗</h2>
-      <div className="funnel">
-        {data.map((step) => (
-          <div className="funnel-step" key={step.label} style={{ width: `${Math.max((step.count / max) * 100, 42)}%` }}>
-            <strong>{step.label}</strong><span>{step.count.toLocaleString()} · {step.rate}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <section className="analysis-panel"><h2>转化漏斗</h2><div className="funnel">{data.map((step) => <div className="funnel-step" key={step.label} style={{ width: `${Math.max((step.count / max) * 100, 42)}%` }}><strong>{step.label}</strong><span>{step.count.toLocaleString()} · {step.rate}</span></div>)}</div></section>;
 }
 
 export function DashboardPage() {
   const [range, setRange] = useState<AnalyticsRange>({ preset: '7d' });
   const overview = useOverview(range);
   const announcements = useAnnouncements();
-  return (
-    <div className="analytics-page">
-      <p className="eyebrow">核心指标</p>
-      <div className="page-heading"><div><h1>数据看板</h1><p>首页聚焦 DAU、收入、会员转化与 AI 调用等核心经营指标。</p></div><RangeFilter value={range} onChange={setRange} /></div>
-      <StatusMessage loading={overview.loading} error={overview.error} />
-      <MetricGrid cards={overview.data.cards.slice(0, 6)} compact />
-      <AnnouncementPanel items={announcements.items} loading={announcements.loading} error={announcements.error} />
-    </div>
-  );
+  return <div className="analytics-page"><p className="eyebrow">核心指标</p><div className="page-heading"><div><h1>数据看板</h1><p>首页聚焦 DAU、收入、会员转化与 AI 调用等核心经营指标。</p></div><RangeFilter value={range} onChange={setRange} /></div><StatusMessage loading={overview.loading} error={overview.error} /><TodoCenterPanel /><MetricGrid cards={overview.data.cards.slice(0, 6)} compact /><AnnouncementPanel items={announcements.items} loading={announcements.loading} error={announcements.error} /></div>;
 }
 
 export function AnalyticsPage() {
@@ -353,15 +209,5 @@ export function AnalyticsPage() {
   const activeRanking = activeTab === 'overview' ? overview.data.rankings : section.data.table;
   const isLoading = activeTab === 'overview' ? overview.loading : section.loading;
   const error = activeTab === 'overview' ? overview.error : section.error;
-
-  return (
-    <div className="analytics-page">
-      <p className="eyebrow">详细分析</p>
-      <div className="page-heading"><div><h1>数据分析</h1><p>对接 /admin/analytics/* 接口，支持按时间范围查看用户、房源、会员和 AI 评房表现。</p></div><RangeFilter value={range} onChange={setRange} /></div>
-      <div className="analysis-tabs">{tabs.map((tab) => <button type="button" className={activeTab === tab.key ? 'active' : ''} onClick={() => setActiveTab(tab.key)} key={tab.key}>{tab.label}</button>)}</div>
-      <StatusMessage loading={isLoading} error={error} />
-      <MetricGrid cards={activeCards} />
-      <div className="analysis-grid"><TrendChart data={activeTrend} /><RankingTable items={activeRanking} /><Funnel data={overview.data.funnel} /></div>
-    </div>
-  );
+  return <div className="analytics-page"><p className="eyebrow">详细分析</p><div className="page-heading"><div><h1>数据分析</h1><p>对接 /admin/analytics/* 接口，支持按时间范围查看用户、房源、会员和 AI 评房表现。</p></div><RangeFilter value={range} onChange={setRange} /></div><div className="analysis-tabs">{tabs.map((tab) => <button type="button" className={activeTab === tab.key ? 'active' : ''} onClick={() => setActiveTab(tab.key)} key={tab.key}>{tab.label}</button>)}</div><StatusMessage loading={isLoading} error={error} /><MetricGrid cards={activeCards} /><div className="analysis-grid"><TrendChart data={activeTrend} /><RankingTable items={activeRanking} /><Funnel data={overview.data.funnel} /></div></div>;
 }
