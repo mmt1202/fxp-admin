@@ -5,12 +5,12 @@ import { Sidebar } from '../components/Sidebar';
 import { useAuthStore } from '../store/auth';
 
 export function AdminLayout() {
-  const { token, currentAdmin, meLoading, fetchMe, logout } = useAuthStore();
+  const { token, currentAdmin, meLoading, meError, fetchMe, logout } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token && !currentAdmin) {
-      fetchMe().catch(() => navigate('/login', { replace: true }));
+      void fetchMe();
     }
   }, [currentAdmin, fetchMe, navigate, token]);
 
@@ -31,6 +31,7 @@ export function AdminLayout() {
           <div>
             <strong>房小评管理后台</strong>
             <span>{meLoading ? '正在加载管理员权限...' : `当前管理员：${currentAdmin?.displayName ?? currentAdmin?.username ?? '未加载'}`}</span>
+            {meError && <span className="permission-warning" role="status">{meError}</span>}
           </div>
           <GlobalSearch />
           <button type="button" className="logout-button" onClick={handleLogout}>退出登录</button>

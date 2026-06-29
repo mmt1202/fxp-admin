@@ -36,7 +36,7 @@
 ### 管理员登录
 
 - Method: `POST`
-- Path: `/auth/login`
+- Path: `/admin/auth/login`
 - Body:
 
 ```json
@@ -50,14 +50,14 @@
 
 ```json
 {
-  "accessToken": "jwt-token",
+  "token": "jwt-token",
   "expiresIn": 7200,
   "admin": {
     "id": "adm_001",
     "username": "admin",
     "displayName": "超级管理员",
-    "roles": ["super_admin"],
-    "permissions": ["users:read", "houses:write"]
+    "role": { "id": "super_admin", "name": "超级管理员", "permissions": ["dashboard:view", "users:view"] },
+    "permissions": ["dashboard:view", "users:view"]
   }
 }
 ```
@@ -65,8 +65,9 @@
 ### 当前管理员信息
 
 - Method: `GET`
-- Path: `/auth/me`
-- Response `data`: 同登录接口中的 `admin` 字段。
+- Path: `/admin/auth/me`
+- Headers: `Authorization: Bearer <token>`
+- Response `data`: 同登录接口中的 `admin` 字段，至少包含管理员 `id`、`username`、`displayName`、`permissions`。超级管理员建议返回完整权限；如果暂未返回，前端会使用超级管理员权限兜底避免菜单被过滤隐藏。
 
 ## 用户管理
 

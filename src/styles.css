@@ -167,6 +167,10 @@ button:disabled {
   color: #64748b;
 }
 
+.topbar .permission-warning {
+  color: #b45309;
+}
+
 .content-card {
   min-height: calc(100vh - 132px);
   padding: 28px;
