@@ -19,7 +19,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   meLoading: false,
   login: (token, admin) => {
     tokenStorage.set(token);
-    set({ token, currentAdmin: admin ?? null });
+    set({ token, currentAdmin: admin ?? null, meLoading: false });
   },
   logout: () => {
     tokenStorage.clear();
@@ -41,6 +41,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
   hasPermission: (permission) => {
     if (!permission) return true;
-    return get().currentAdmin?.permissions.includes(permission) ?? false;
+    const permissions = get().currentAdmin?.permissions ?? [];
+    return permissions.includes('*') || permissions.includes(permission);
   },
 }));

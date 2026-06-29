@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/auth';
 import { adminPermissions, type AdminPermission, type AdminRole, type AdminUser, type AdminUserInput } from '../types/admin';
 
 const permissionLabels: Record<AdminPermission, string> = {
+  '*': '全部权限',
   'dashboard:view': '数据看板查看',
   'users:view': '用户查看',
   'users:update': '用户更新',

@@ -10,7 +10,7 @@ export const adminPermissions = [
   'announcements:manage',
 ] as const;
 
-export type AdminPermission = (typeof adminPermissions)[number];
+export type AdminPermission = (typeof adminPermissions)[number] | '*';
 
 export type AdminRole = {
   id: string;
