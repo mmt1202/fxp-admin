@@ -7,6 +7,15 @@ export type AdminEndpoint = {
   description: string;
 };
 
+export type AdminModuleStatus = 'ready' | 'mock' | 'frontend-only' | 'backend-missing';
+
+export const adminModuleStatusLabels: Record<AdminModuleStatus, string> = {
+  ready: '已联调',
+  mock: 'Mock 数据',
+  'frontend-only': '前端预览',
+  'backend-missing': '等待后端',
+};
+
 export type AdminModuleKey =
   | 'dashboard' | 'analytics' | 'users' | 'properties' | 'reviews' | 'moderation' | 'config'
   | 'content-moderation' | 'content-quality' | 'recommendation-pools' | 'memberships' | 'orders'
@@ -24,18 +33,20 @@ export type AdminModule = {
   icon: string;
   description: string;
   module: AdminModuleKey;
+  status: AdminModuleStatus;
   endpoints: AdminEndpoint[];
   permission?: AdminPermission;
   element?: ReactNode;
 };
 
-const module = (item: Omit<AdminModule, 'endpoints'> & { endpoints?: AdminEndpoint[] }): AdminModule => ({
+const module = (item: Omit<AdminModule, 'endpoints' | 'status'> & { endpoints?: AdminEndpoint[]; status?: AdminModuleStatus }): AdminModule => ({
   endpoints: [],
+  status: item.endpoints?.length ? 'ready' : 'frontend-only',
   ...item,
 });
 
 export const adminModules: AdminModule[] = [
-  module({ path: '/dashboard', label: '数据看板', icon: '📊', module: 'dashboard', description: '核心指标与增长趋势概览。', permission: 'dashboard:view', endpoints: [{ method: 'GET', path: '/admin/dashboard', description: '获取后台数据看板核心指标。' }, { method: 'GET', path: '/admin/dashboard/trend', description: '获取后台数据看板趋势数据。' }] }),
+  module({ path: '/dashboard', label: '数据看板', icon: '📊', module: 'dashboard', description: '核心指标与增长趋势概览。', permission: 'dashboard:view', status: 'ready', endpoints: [{ method: 'GET', path: '/admin/dashboard', description: '获取后台数据看板核心指标。' }, { method: 'GET', path: '/admin/dashboard/trend', description: '获取后台数据看板趋势数据。' }, { method: 'GET', path: '/admin/todos', description: '获取后台待办中心数量、最近事项和角色过滤结果。' }] }),
   module({ path: '/analytics', label: '数据分析', icon: '📈', module: 'analytics', description: '按时间范围分析用户、房源、会员转化与 AI 评房数据。' }),
   module({ path: '/users', label: '用户管理', icon: '👥', module: 'users', description: '管理 App 用户资料与账号状态。', permission: 'users:view', endpoints: [{ method: 'GET', path: '/admin/users', description: '获取用户列表。' }, { method: 'PUT', path: '/admin/users/:userId/status', description: '更新指定用户账号状态。' }] }),
   module({ path: '/users/:userId', label: '用户详情', icon: '👤', module: 'users', description: '查看用户资料、会员和举报记录。' }),
@@ -57,7 +68,7 @@ export const adminModules: AdminModule[] = [
   module({ path: '/membership', label: '会员配置', icon: '💎', module: 'memberships', description: '配置会员权益、套餐状态、增值服务与更新策略。', permission: 'membership:update' }),
   module({ path: '/membership/plans', label: '会员套餐', icon: '💎', module: 'membership-plans', description: '配置会员套餐、价格、有效期、AI 次数额度与启停状态。' }),
   module({ path: '/marketing', label: '运营活动', icon: '🎯', module: 'marketing', description: '配置拉新、促活与转化活动，跟踪奖励发放和订单转化效果。' }),
-  module({ path: '/marketing/tools', label: '营销工具', icon: '🎟️', module: 'marketing-tools', description: '管理优惠券批次、兑换码生成、领取记录和使用记录。' }),
+  module({ path: '/marketing/tools', label: '营销工具', icon: '🎟️', module: 'marketing-tools', description: '管理优惠券批次、兑换码生成、领取记录和使用记录。', status: 'mock' }),
   module({ path: '/marketing/recall-tasks', label: '用户召回', icon: '📣', module: 'recall-tasks', description: '创建 Push、短信、站内信与邮件召回任务，并跟踪异步发送结果。' }),
   module({ path: '/push/campaigns', label: 'Push 推送', icon: '📲', module: 'push-campaigns', description: '创建 Push 推送任务，配置目标人群、跳转链接、定时发送并查看效果。', endpoints: [{ method: 'GET', path: '/admin/push/campaigns', description: '获取 Push 任务。' }, { method: 'POST', path: '/admin/push/campaigns', description: '创建 Push 任务。' }] }),
   module({ path: '/recommendation-pools', label: '推荐池管理', icon: '🎯', module: 'recommendation-pools', description: '创建首页推荐池，维护推荐内容、排序、置顶与定时上下线。' }),
