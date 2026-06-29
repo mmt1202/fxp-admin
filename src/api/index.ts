@@ -9,4 +9,3 @@ export * from './exportTasks';
 export * from './appVersions';
 export * from './messages';
 export * from './push';
-export * as adminApiModules from './modules';
