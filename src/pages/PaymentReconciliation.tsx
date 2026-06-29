@@ -100,7 +100,7 @@ export function PaymentReconciliation() {
   }, [queryParams]);
 
   useEffect(() => {
-    void loadData(false);
+    queueMicrotask(() => { void loadData(false); });
   }, [loadData]);
 
   const handleRun = async () => {

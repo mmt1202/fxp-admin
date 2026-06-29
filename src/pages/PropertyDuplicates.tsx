@@ -27,7 +27,7 @@ export function PropertyDuplicates() {
     }
   };
 
-  useEffect(() => { void loadGroups(); }, []);
+  useEffect(() => { queueMicrotask(() => { void loadGroups(); }); }, []);
 
   const runAction = async (group: DuplicateGroup, action: 'confirm' | 'merge' | 'ignore') => {
     const id = groupKey(group);

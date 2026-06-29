@@ -30,7 +30,7 @@ export function ExportTaskCenter() {
   }, []);
 
   useEffect(() => {
-    void loadTasks();
+    queueMicrotask(() => { void loadTasks(); });
     const timer = window.setInterval(() => void loadTasks(), 10000);
     return () => window.clearInterval(timer);
   }, [loadTasks]);

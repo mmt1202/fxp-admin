@@ -56,7 +56,7 @@ export function CityConfig() {
   };
 
   useEffect(() => {
-    void loadCities();
+    queueMicrotask(() => { void loadCities(); });
   }, []);
 
   const updateField = <K extends keyof CityConfigPayload>(key: K, value: CityConfigPayload[K]) => {

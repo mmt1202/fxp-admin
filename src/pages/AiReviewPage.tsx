@@ -63,7 +63,9 @@ export function AiReviewPage() {
     }
   }, [status]);
 
-  useEffect(() => { void loadRecords(); }, [loadRecords]);
+  useEffect(() => {
+    queueMicrotask(() => { void loadRecords(); });
+  }, [loadRecords]);
 
   useEffect(() => {
     if (selectedId === undefined) return;
