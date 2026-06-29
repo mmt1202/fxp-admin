@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { adminModules } from '../routes/modules';
+import { adminModuleStatusLabels, adminModules } from '../routes/modules';
 import { useAuthStore } from '../store/auth';
 
 export function Sidebar() {
@@ -13,7 +13,8 @@ export function Sidebar() {
         {visibleModules.map((item) => (
           <NavLink key={item.path} to={item.path} className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
             <span>{item.icon}</span>
-            {item.label}
+            <span className="nav-label">{item.label}</span>
+            <span className={`module-status-badge status-${item.status}`}>{adminModuleStatusLabels[item.status]}</span>
           </NavLink>
         ))}
       </nav>

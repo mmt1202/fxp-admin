@@ -96,7 +96,7 @@ function moduleElement(module: AdminModule) {
     case '/settings': return <SystemConfig />;
     case '/risk': return <RiskConfig />;
     case '/admin-users': return <AdminUsers />;
-    default: return <ModulePage title={module.label} description={module.description} module={module.module} />;
+    default: return <ModulePage title={module.label} description={module.description} module={module.module} status={module.status} />;
   }
 }
 

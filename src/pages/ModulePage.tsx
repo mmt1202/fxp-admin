@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiClient } from '../api/client';
 import type { AdminListResult, DashboardStats, DashboardTrendPoint } from '../api/client';
-import type { AdminModuleKey } from '../routes/modules';
+import { adminModuleStatusLabels, type AdminModuleKey, type AdminModuleStatus } from '../routes/modules';
 
 type ModulePageProps = {
   title: string;
   description: string;
   module?: AdminModuleKey;
+  status?: AdminModuleStatus;
   permission?: string;
 };
 
@@ -85,7 +86,7 @@ function TrendList({ points }: { points: DashboardTrendPoint[] }) {
   );
 }
 
-export function ModulePage({ title, description, module = 'dashboard' }: ModulePageProps) {
+export function ModulePage({ title, description, module = 'dashboard', status = 'backend-missing' }: ModulePageProps) {
   const loader = useMemo(() => moduleLoaders[module], [module]);
   const [state, setState] = useState<PageState>(loader ? { status: 'loading' } : { status: 'ready', data: null });
 
@@ -106,9 +107,14 @@ export function ModulePage({ title, description, module = 'dashboard' }: ModuleP
 
   return (
     <div className="module-page">
-      <p className="eyebrow">后台模块</p>
-      <h1>{title}</h1>
-      <p>{description}</p>
+      <div className="module-page-header">
+        <div>
+          <p className="eyebrow">后台模块</p>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
+        <span className={`module-status-badge status-${status}`}>{adminModuleStatusLabels[status]}</span>
+      </div>
 
       {state.status === 'loading' && <p className="empty-state">正在加载...</p>}
       {state.status === 'error' && <p className="error-state">{state.message}</p>}
