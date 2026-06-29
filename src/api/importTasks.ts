@@ -1,5 +1,5 @@
 import { adaptList, apiClient, type ListResult } from './client';
-import { authState } from '../state/auth';
+import { useAuthStore } from '../store/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
@@ -55,10 +55,11 @@ export const importTaskApi = {
     formData.set('file', file);
     formData.set('previewOnly', String(previewOnly));
 
+    const token = useAuthStore.getState().token;
     const response = await fetch(`${API_BASE_URL}/admin/import/tasks`, {
       method: 'POST',
       body: formData,
-      headers: authState.token ? { Authorization: `Bearer ${authState.token}` } : undefined,
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
     const payload = await response.json();
     if (!response.ok) {

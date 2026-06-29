@@ -1,4 +1,4 @@
-import { authState } from '../state/auth';
+import { useAuthStore } from '../store/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
@@ -206,7 +206,7 @@ export function toQuery(params?: Record<string, string | number | boolean | unde
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { skipAuth = false, headers, body, query, token: optionToken, ...init } = options;
-  const token = optionToken ?? authState.token;
+  const token = optionToken ?? useAuthStore.getState().token;
   const response = await fetch(`${API_BASE_URL}${path}${toQuery(query)}`, {
     ...init,
     body,
