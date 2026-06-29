@@ -186,6 +186,114 @@
   gap: 12px;
 }
 
+.todo-center {
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid #bfdbfe;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #eff6ff, #fff 54%, #f8fafc);
+}
+
+.todo-center-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.todo-center-header h2 {
+  margin: 0 0 6px;
+  color: #0f172a;
+}
+
+.todo-center-header h2 strong {
+  color: #1d4ed8;
+  font-size: 34px;
+}
+
+.todo-center-header span,
+.todo-card small,
+.todo-recent-item small {
+  color: #64748b;
+}
+
+.todo-loading,
+.todo-warning {
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.todo-loading {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.todo-warning {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.todo-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.todo-card,
+.todo-recent-item {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  color: inherit;
+  text-align: left;
+  background: #fff;
+  box-shadow: 0 10px 24px rgb(37 99 235 / 8%);
+}
+
+.todo-card:hover,
+.todo-recent-item:hover {
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.todo-card span,
+.todo-recent-item span {
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.todo-card strong {
+  color: #0f172a;
+  font-size: 30px;
+}
+
+.todo-card em {
+  color: #1d4ed8;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.todo-recent-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.todo-recent-item {
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.todo-recent-item small {
+  grid-column: 2;
+}
+
 @media (max-width: 1100px) {
   .messages-layout {
     grid-template-columns: 1fr;
@@ -199,5 +307,17 @@
     order: 3;
     max-width: none;
     flex-basis: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .todo-center-header,
+  .todo-recent-item {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .todo-recent-item small {
+    grid-column: auto;
   }
 }
