@@ -24,6 +24,7 @@ import { MembershipPlans } from '../pages/MembershipPlans';
 import { ModerationPage } from '../pages/ModerationPage';
 import { ModulePage } from '../pages/ModulePage';
 import { OperationLogs } from '../pages/OperationLogs';
+import { OrdersPage } from '../pages/OrdersPage';
 import { PaymentReconciliation } from '../pages/PaymentReconciliation';
 import { PropertyDuplicates } from '../pages/PropertyDuplicates';
 import { PropertyGovernance } from '../pages/PropertyGovernance';
@@ -33,6 +34,7 @@ import { RecallTasks } from '../pages/RecallTasks';
 import { RecommendationPools } from '../pages/RecommendationPools';
 import { RefundManagement } from '../pages/RefundManagement';
 import { RegionalHeatPage } from '../pages/RegionalHeatPage';
+import { ReviewsPage } from '../pages/ReviewsPage';
 import { RiskConfig } from '../pages/RiskConfig';
 import { RiskWatchlistPage } from '../pages/RiskWatchlist';
 import { SecurityBlacklist } from '../pages/SecurityBlacklist';
@@ -60,6 +62,7 @@ function moduleElement(module: AdminModule) {
     case '/content-moderation': return <ContentModeration />;
     case '/moderation':
     case '/reports': return <ModerationPage />;
+    case '/reviews': return <ReviewsPage />;
     case '/membership': return <UserMembershipsPage />;
     case '/membership/plans': return <MembershipPlans />;
     case '/marketing': return <MarketingCampaigns />;
@@ -77,6 +80,7 @@ function moduleElement(module: AdminModule) {
     case '/communities': return <CommunityLibrary />;
     case '/regional-heat': return <RegionalHeatPage />;
     case '/geo/cities': return <CityConfig />;
+    case '/orders': return <OrdersPage />;
     case '/finance/reconciliation': return <PaymentReconciliation />;
     case '/finance/refunds': return <RefundManagement />;
     case '/ai/reviews': return <AiReviewPage />;
