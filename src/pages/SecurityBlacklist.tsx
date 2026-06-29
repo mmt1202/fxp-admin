@@ -42,7 +42,7 @@ export function SecurityBlacklist() {
     }
   }, [keyword]);
 
-  useEffect(() => { void loadBlacklist('', true); }, [loadBlacklist]);
+  useEffect(() => { queueMicrotask(() => { void loadBlacklist('', true); }); }, [loadBlacklist]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

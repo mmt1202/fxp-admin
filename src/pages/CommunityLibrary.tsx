@@ -32,7 +32,7 @@ export function CommunityLibrary() {
   const queryParams = useMemo(() => ({ keyword: keyword || undefined, city: city || undefined, district: district || undefined }), [city, district, keyword]);
 
   const loadCommunities = useCallback(async () => { setLoading(true); try { const result = await apiClient.getCommunities(queryParams); setCommunities(result.items); setTotal(result.total ?? result.items.length); setMessage(''); setSaveState('idle'); } catch (error) { setMessage(error instanceof Error ? error.message : '小区库读取失败'); setSaveState('error'); } finally { setLoading(false); } }, [queryParams]);
-  useEffect(() => { void loadCommunities(); }, [loadCommunities]);
+  useEffect(() => { queueMicrotask(() => { void loadCommunities(); }); }, [loadCommunities]);
 
   const updateForm = <K extends keyof CommunityBasePayload>(key: K, value: CommunityBasePayload[K]) => { setForm((current) => ({ ...current, [key]: value })); setSaveState('idle'); setMessage(''); };
   const startEdit = (community?: CommunityBase) => { setEditing(community); setForm(toForm(community)); setSaveState('idle'); setMessage(''); };

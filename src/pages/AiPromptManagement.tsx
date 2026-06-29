@@ -39,7 +39,9 @@ export function AiPromptManagement() {
     }
   };
 
-  useEffect(() => { void loadPrompts(); }, []);
+  useEffect(() => {
+    queueMicrotask(() => { void loadPrompts(); });
+  }, []);
 
   const selectedPair = useMemo(() => compareIds.map((id) => prompts.find((prompt) => String(prompt.id) === id) ?? null), [compareIds, prompts]);
   const diffRows = useMemo(() => {
