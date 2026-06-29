@@ -122,7 +122,7 @@ export function ModulePage({ title, description, module = 'dashboard' }: ModuleP
       )}
       {state.status === 'ready' && module === 'ai-stats' && <DataGrid data={(state.data ?? {}) as Record<string, unknown>} />}
       {state.status === 'ready' && !['dashboard', 'ai-stats'].includes(module) && loader && <DataTable result={state.data as AdminListResult} />}
-      {state.status === 'ready' && !loader && <p className="empty-state">该模块已接入独立页面或等待后端接口联调。</p>}
+      {state.status === 'ready' && !loader && <p className="empty-state">等待后端接口；当前模块仅保留导航入口，接口联调完成后再展示业务数据。</p>}
     </div>
   );
 }

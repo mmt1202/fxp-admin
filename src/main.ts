@@ -1,7 +1,7 @@
 import { AiStatsPage } from './pages/AiStatsPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
-import { OrdersPage } from './pages/OrdersPage';
+import { OrdersPage } from './pages/LegacyOrdersPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { UsersPage } from './pages/UsersPage';
